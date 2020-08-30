@@ -15,7 +15,6 @@ end
 
 # ╔═╡ 7056a580-e8b6-11ea-2ac9-ad6ced139615
 begin 
-	using Distributions
     using Random
     using UnPack
 	using Plots
@@ -169,7 +168,7 @@ function scenario(start_curve,params)
 	for month in 1:months
 
 		## Correlated Normals
-        rand!(Normal(), shock)
+        randn!(shock)
         # shock .= norms'[:,month]
 		shock_long  = shock[1]
 		shock_short = shock[1] * ρ₁₂ + shock[2] * const1
@@ -253,12 +252,12 @@ The same disclaimer from the Academy applies:
 # ╟─56f67070-ea3c-11ea-31f5-b7d1f7182a31
 # ╟─076facc0-e9f5-11ea-2fa5-91cfaa965d08
 # ╟─7f7a2280-ea2d-11ea-2ee8-79bc4c3a72ec
-# ╟─7056a580-e8b6-11ea-2ac9-ad6ced139615
 # ╟─23cba4a0-ea3b-11ea-2b62-8dfc856875b7
+# ╠═7056a580-e8b6-11ea-2ac9-ad6ced139615
 # ╟─f15e18e0-ea3a-11ea-3868-d9236a4810a1
 # ╟─79cfe060-e9f4-11ea-2fc8-b769419cc4fd
 # ╟─1a5bb1b0-ea33-11ea-3514-e1c85b65d356
 # ╟─49419d10-e861-11ea-36e0-e19ece503681
-# ╟─4ff1ccc0-e8b6-11ea-20be-d7992829086d
+# ╠═4ff1ccc0-e8b6-11ea-20be-d7992829086d
 # ╟─c5078e00-e8b6-11ea-105b-9731d9852664
 # ╟─69730d30-ea37-11ea-05be-8350df76fd06
