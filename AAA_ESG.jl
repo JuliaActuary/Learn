@@ -52,7 +52,7 @@ You can edit these and watch the results change in realtime.
 
 # ╔═╡ dabece20-ea37-11ea-2e6a-61eda948928f
 @bind n_scenarios html"""
-	Number of Scenarios: <input type='number' min='1' max='5' value='1000' />
+	Number of Scenarios: <input type='number' min='1' max='5' value='200' />
     
 	"""
 
