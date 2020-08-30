@@ -18,10 +18,8 @@ begin
     using Random
     using UnPack
 	using Plots
+	using Statistics
 end
-
-# ╔═╡ 3d16dce0-ea3b-11ea-3c22-e5e3339f786b
-
 
 # ╔═╡ f04b8ce0-ea39-11ea-05ad-a996c592cc82
 md"""
@@ -33,7 +31,7 @@ It's a simple demo intended to be informative about the underlying model produci
    - Cell order doesn't matter!
    - Hover over the cells and click the eye icon to expand the cell to see any hidden code cells.
 - **Performance** - Work with thousands of simulations and visualize them in realtime
-- **Syntax** - Expand some of the code cells below to see code that looks like math, e.g. this line of code:
+- **Syntax** - Expand some of the code cells below to see code that looks more like math, e.g. this line of code:
 ```julia
 α_τ =(1-β₂) * α_τ + β₂ * τ₂ + ϕ * (log(r₁) - log(τ₁)) + σ₂ * shock_short * r₁^θ
 ```
@@ -242,7 +240,6 @@ The same disclaimer from the Academy applies:
 """
 
 # ╔═╡ Cell order:
-# ╠═3d16dce0-ea3b-11ea-3c22-e5e3339f786b
 # ╟─f04b8ce0-ea39-11ea-05ad-a996c592cc82
 # ╟─018237f0-ea3c-11ea-387e-abf5110ac1fa
 # ╟─dabece20-ea37-11ea-2e6a-61eda948928f
@@ -253,11 +250,11 @@ The same disclaimer from the Academy applies:
 # ╟─076facc0-e9f5-11ea-2fa5-91cfaa965d08
 # ╟─7f7a2280-ea2d-11ea-2ee8-79bc4c3a72ec
 # ╟─23cba4a0-ea3b-11ea-2b62-8dfc856875b7
-# ╠═7056a580-e8b6-11ea-2ac9-ad6ced139615
+# ╟─7056a580-e8b6-11ea-2ac9-ad6ced139615
 # ╟─f15e18e0-ea3a-11ea-3868-d9236a4810a1
 # ╟─79cfe060-e9f4-11ea-2fc8-b769419cc4fd
 # ╟─1a5bb1b0-ea33-11ea-3514-e1c85b65d356
 # ╟─49419d10-e861-11ea-36e0-e19ece503681
-# ╠═4ff1ccc0-e8b6-11ea-20be-d7992829086d
+# ╟─4ff1ccc0-e8b6-11ea-20be-d7992829086d
 # ╟─c5078e00-e8b6-11ea-105b-9731d9852664
 # ╟─69730d30-ea37-11ea-05be-8350df76fd06
