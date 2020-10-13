@@ -11,3 +11,7 @@ Examples and tuturials related to Actuarial Science usage in Julia. For more and
 Reactively explore a replication of the American Academy of Actuaries' Economic Scenario Generator
 
 ![A gif showing different behaviors of an Economic Scenario Generator with different parameters](https://user-images.githubusercontent.com/711879/95031260-a6d9cb00-067a-11eb-956e-440ebc7b129c.gif)
+
+## Basic Cashlfow Analysis
+
+![Simple cashflow analysis with ActuaryUtilities.jl](https://user-images.githubusercontent.com/711879/95857181-d646a280-0d20-11eb-8300-a4c226021334.gif)
