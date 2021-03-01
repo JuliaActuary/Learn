@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.11.14
+# v0.12.21
 
 using Markdown
 using InteractiveUtils
@@ -28,14 +28,24 @@ md"
 # ╔═╡ 5322a010-065f-11eb-0864-3d69c92cff6c
 md"**Issue Age:** $(@bind issue_age Slider(18:100,show_value=true,default=50))"
 
-# ╔═╡ 01495e10-065e-11eb-0fbf-a7e245792ab3
-tables = MortalityTables.tables();
+# ╔═╡ 968d79c0-0695-11eb-2586-0565817b37a8
+md"The rest of the code:"
+
+# ╔═╡ ad6c9830-068e-11eb-2934-6f460c421895
+function rate_ratio(a, a_select,b, b_select, issue_age,duration)
+		att_age = issue_age + duration - 1
+		a = a_select ? a.select[issue_age][att_age] : a.ultimate[att_age]
+		b = b_select ? b.select[issue_age][att_age] : b.ultimate[att_age]
+		return b / a
+end
+
+# ╔═╡ df760e20-0692-11eb-16bb-e5b41f8a5255
+available_names = [x.name for x in MortalityTables.table_source_map]
 
 # ╔═╡ 26f84770-065e-11eb-03ca-435dfb6ed5da
 md"
 **Table A:** $(@bind name_a Select(
-	[name => name for name in sort!(collect(keys(tables)))
-		],
+available_names,
 default=\"2015 VBT Male Non-Smoker RR100 ALB\"
 ))
 
@@ -44,11 +54,18 @@ default=\"2015 VBT Male Non-Smoker RR100 ALB\"
 Use select rates (if available): $(@bind sel_a CheckBox(default=true))
 "
 
+# ╔═╡ b6fbd7f0-065f-11eb-1af7-5141be0a585f
+if lookup_a == ""
+	
+	table_a = MortalityTables.table(name_a)
+else
+	table_a = MortalityTables.table(parse(Int,lookup_a))
+end
+
 # ╔═╡ 7ae73f7e-065e-11eb-1472-b7bc0e5cff29
 md"
 **Table B:** $(@bind name_b Select(
-	[name => name for name in sort!(collect(keys(tables)))
-		],
+available_names,
 default=\"2015 VBT Male Non-Smoker RR175 ALB\"
 ))
 
@@ -57,22 +74,11 @@ default=\"2015 VBT Male Non-Smoker RR175 ALB\"
 Use select rates (if available): $(@bind sel_b CheckBox(default=true))
 "
 
-# ╔═╡ 968d79c0-0695-11eb-2586-0565817b37a8
-md"The rest of the code:"
-
-# ╔═╡ b6fbd7f0-065f-11eb-1af7-5141be0a585f
-if lookup_a == ""
-	
-	table_a = tables[name_a]
-else
-	table_a = get_SOA_table(parse(Int,lookup_a))
-end
-
 # ╔═╡ bb15f410-065f-11eb-2342-9319b0ff6237
 if lookup_b == ""
-	table_b = tables[name_b]
+	table_b = MortalityTables.table(name_b)
 else
-	table_b = get_SOA_table(parse(Int,lookup_b))
+	table_b = MortalityTables.table(parse(Int,lookup_b))
 end
 
 # ╔═╡ d60bc480-065e-11eb-2072-b3ac00e39598
@@ -110,14 +116,6 @@ let
 	
 	plot(p1,p2,size=(980,400))
 	
-end
-
-# ╔═╡ ad6c9830-068e-11eb-2934-6f460c421895
-function rate_ratio(a, a_select,b, b_select, issue_age,duration)
-		att_age = issue_age + duration - 1
-		a = a_select ? a.select[issue_age][att_age] : a.ultimate[att_age]
-		b = b_select ? b.select[issue_age][att_age] : b.ultimate[att_age]
-		return b / a
 end
 
 # ╔═╡ 378a33f2-0695-11eb-3dee-af6f6298edad
@@ -173,13 +171,13 @@ begin
 	
 end
 
-# ╔═╡ df760e20-0692-11eb-16bb-e5b41f8a5255
+# ╔═╡ 03dabe48-7a4a-11eb-252f-5bd03b2e0201
+# make the notebook just a little wider
 html"""<style>
-main {
-    max-width: 1000px;
+pluto-notebook {
+    width: 1000px;
 }
 """
-
 
 # ╔═╡ Cell order:
 # ╟─de790392-065d-11eb-047d-a10af7f2fdc7
@@ -187,8 +185,7 @@ main {
 # ╟─7ae73f7e-065e-11eb-1472-b7bc0e5cff29
 # ╟─5322a010-065f-11eb-0864-3d69c92cff6c
 # ╟─d60bc480-065e-11eb-2072-b3ac00e39598
-# ╟─e38d2460-068f-11eb-3d19-e1902fc7b28c
-# ╟─01495e10-065e-11eb-0fbf-a7e245792ab3
+# ╠═e38d2460-068f-11eb-3d19-e1902fc7b28c
 # ╟─968d79c0-0695-11eb-2586-0565817b37a8
 # ╠═dbb88400-065d-11eb-3fe8-9b5b7f873d3e
 # ╠═b6fbd7f0-065f-11eb-1af7-5141be0a585f
@@ -196,3 +193,4 @@ main {
 # ╠═ad6c9830-068e-11eb-2934-6f460c421895
 # ╠═378a33f2-0695-11eb-3dee-af6f6298edad
 # ╟─df760e20-0692-11eb-16bb-e5b41f8a5255
+# ╟─03dabe48-7a4a-11eb-252f-5bd03b2e0201
