@@ -1,0 +1,16 @@
+lang,algorithm,function_name,median,mean
+R (data.table),Vectorized,npv (data.table),770554.0,842767.3
+R,Vectorized,npv base,4264.0,46617.
+R,Accumulator,npv_loop,4346.0,62275.72,
+Rust,Accumulator,npv,24.0,
+Python (NumPy),Vectorized,npv,,6823.250583999999
+Python,Accumulator,npv_loop,,1486.0355
+Julia,Vectorized,npv1,235.322,228.198
+Julia,Vectorized,npv2,235.758,218.391
+Julia,Accumulator,npv3,14.507,14.487
+Julia,Accumulator,npv4,10.764,10.761
+Julia,Accumulator,npv5,11.490,11.469
+Julia,Accumulator,npv6,9.037,9.009
+Julia,Accumulator,npv7,7.920,7.917
+Julia,Accumulator,npv8,7.372,7.375
+Julia,Accumulator,npv9,6.388,6.375
