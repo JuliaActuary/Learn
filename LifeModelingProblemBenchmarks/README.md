@@ -10,27 +10,27 @@ Which wasn't concretely defined, but I think the "Life Modeling Problem" has the
 
 Folks started submitting versions of a toy problem with the first two characteristics to showcase different approaches and languages.
 
-The following was benchmarked on 2020 Macbook Air (M1) with all software compatible with the new M1 chip:
+The following was benchmarked on 2020 Macbook Air (M1) with all  compatible with the new M1 chip. Times are nanoseconds:
 
 ```
-┌────────────────┬─────────────┬──────────────────┬──────────┬───────────┐
-│           lang │   algorithm │    function_name │   median │      mean │
-│         String │      String │           String │ Float64? │  Float64? │
-├────────────────┼─────────────┼──────────────────┼──────────┼───────────┤
-│ R (data.table) │  Vectorized │ npv (data.table) │ 770554.0 │ 8.42767e5 │
-│              R │  Vectorized │         npv base │   4264.0 │   46617.0 │
-│              R │ Accumulator │         npv_loop │   4346.0 │   62275.7 │
-│           Rust │ Accumulator │              npv │     24.0 │   missing │
-│ Python (NumPy) │  Vectorized │              npv │  missing │   6823.25 │
-│         Python │ Accumulator │         npv_loop │  missing │   1486.04 │
-│          Julia │  Vectorized │             npv1 │  235.322 │   228.198 │
-│          Julia │  Vectorized │             npv2 │  235.758 │   218.391 │
-│          Julia │ Accumulator │             npv3 │   14.507 │    14.487 │
-│          Julia │ Accumulator │             npv4 │   10.764 │    10.761 │
-│          Julia │ Accumulator │             npv5 │    11.49 │    11.469 │
-│          Julia │ Accumulator │             npv6 │    9.037 │     9.009 │
-│          Julia │ Accumulator │             npv7 │     7.92 │     7.917 │
-│          Julia │ Accumulator │             npv8 │    7.372 │     7.375 │
-│          Julia │ Accumulator │             npv9 │    6.388 │     6.375 │
-└────────────────┴─────────────┴──────────────────┴──────────┴───────────┘
+┌────────────────┬─────────────┬───────────────┬──────────┬──────────┐
+│           lang │   algorithm │ function_name │   median │     mean │
+│         String │      String │        String │ Float64? │ Float64? │
+├────────────────┼─────────────┼───────────────┼──────────┼──────────┤
+│ R (data.table) │  Vectorized │           npv │ 770554.0 │ 842767.3 │
+│              R │  Vectorized │      npv base │   4264.0 │  46617.0 │
+│              R │ Accumulator │      npv_loop │   4346.0 │  62275.7 │
+│           Rust │ Accumulator │           npv │     24.0 │  missing │
+│ Python (NumPy) │  Vectorized │           npv │  missing │   6823.3 │
+│         Python │ Accumulator │      npv_loop │  missing │   1486.0 │
+│          Julia │  Vectorized │          npv1 │    235.3 │    228.2 │
+│          Julia │  Vectorized │          npv2 │    235.8 │    218.4 │
+│          Julia │ Accumulator │          npv3 │     14.5 │     14.5 │
+│          Julia │ Accumulator │          npv4 │     10.8 │     10.8 │
+│          Julia │ Accumulator │          npv5 │     11.5 │     11.5 │
+│          Julia │ Accumulator │          npv6 │      9.0 │      9.0 │
+│          Julia │ Accumulator │          npv7 │      7.9 │      7.9 │
+│          Julia │ Accumulator │          npv8 │      7.4 │      7.4 │
+│          Julia │ Accumulator │          npv9 │      6.4 │      6.4 │
+└────────────────┴─────────────┴───────────────┴──────────┴──────────┘
 ```
