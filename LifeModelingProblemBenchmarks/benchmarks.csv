@@ -1,5 +1,5 @@
 lang,algorithm,function_name,median,mean
-R (data.table),Vectorized,npv (data.table),770554.0,842767.3
+R (data.table),Vectorized,npv,770554.0,842767.3
 R,Vectorized,npv base,4264.0,46617.
 R,Accumulator,npv_loop,4346.0,62275.72,
 Rust,Accumulator,npv,24.0,

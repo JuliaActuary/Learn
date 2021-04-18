@@ -22,8 +22,8 @@ npv_loop <- function(q,w,P,S,r) {
         v = 1 / (1 + r)
         v_t = v
     for (t in 1:length(q)) {
-        result <- result + inforce * (P-S*q) * v_t
-        inforce <- inforce * (1 - (q + w))
+        result <- result + inforce * (P-S*q[t-1]) * v_t
+        inforce <- inforce * (1 - (q[t-1] + w[t-1]))
         v_t = v_t * v
     }
     result
