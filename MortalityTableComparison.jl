@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.21
+# v0.14.3
 
 using Markdown
 using InteractiveUtils
@@ -23,13 +23,31 @@ end
 # ╔═╡ de790392-065d-11eb-047d-a10af7f2fdc7
 md"
 # Mortality Table Comparison Tool
+
+*For full features, use MortalityTables.jl version `2.1.2` or higher.*
 "
 
 # ╔═╡ 5322a010-065f-11eb-0864-3d69c92cff6c
 md"**Issue Age:** $(@bind issue_age Slider(18:100,show_value=true,default=50))"
 
 # ╔═╡ 968d79c0-0695-11eb-2586-0565817b37a8
-md"The rest of the code:"
+md"
+## The rest of the code
+
+The non-plotting stuff.
+"
+
+# ╔═╡ 4694f4aa-47dc-4148-99e0-62ad3cde88a3
+function life_expectancies(table,select,age_range)
+	map(age_range) do age
+		if checkbounds(Bool, select ? table.select : table.ultimate, age) 
+			age + life_expectancy(select ? table.select[age] : table.ultimate,age) 
+		else
+			missing
+		end
+	end
+end
+
 
 # ╔═╡ ad6c9830-068e-11eb-2934-6f460c421895
 function rate_ratio(a, a_select,b, b_select, issue_age,duration)
@@ -40,13 +58,13 @@ function rate_ratio(a, a_select,b, b_select, issue_age,duration)
 end
 
 # ╔═╡ df760e20-0692-11eb-16bb-e5b41f8a5255
-available_names = [x.name for x in MortalityTables.table_source_map]
+available_names = sort!([x.name for x in MortalityTables.table_source_map])
 
 # ╔═╡ 26f84770-065e-11eb-03ca-435dfb6ed5da
 md"
 **Table A:** $(@bind name_a Select(
 available_names,
-default=\"2015 VBT Male Non-Smoker RR100 ALB\"
+default=\"1975-80 Modified Basic Table with Milliman Extension - Male, ALB\"
 ))
 
 *or* Mort.SOA.org table ID (leave blank to use dropdown): $(@bind lookup_a TextField())
@@ -66,7 +84,7 @@ end
 md"
 **Table B:** $(@bind name_b Select(
 available_names,
-default=\"2015 VBT Male Non-Smoker RR175 ALB\"
+default=\"2015 VBT Male Non-Smoker RR100 ALB\"
 ))
 
 *or* Mort.SOA.org table ID (leave blank to use dropdown): $(@bind lookup_b TextField())
@@ -114,8 +132,19 @@ let
 	)
 	plot!(p2, rates_b,label="$name_b")
 	
-	plot(p1,p2,size=(980,400))
+	plot(p1,p2,size=(980,400),titlefontsize=9)
 	
+end
+
+# ╔═╡ 54c92a0c-c8fe-40b5-bcf7-a791c8999b23
+let 
+	p = plot(ylim=(65,100),legend=:bottomright,title="Life Expectancy",palette=:PuOr_4,size=(600,400),xlabel="issue age")
+	age_range = 20:100
+	le_a = life_expectancies(table_a,sel_a,age_range)
+	le_b = life_expectancies(table_b,sel_b,age_range)
+	scatter!(age_range,le_a, m = (:white,stroke(:dodgerblue3)),label="$name_a")
+	scatter!(age_range,le_b, m = (:white,stroke(:salmon1)),label="$name_b")
+	vline!([issue_age],alpha=0.5,color=:grey,linewidth=3,label="selected issue age",titlefontsize=9)
 end
 
 # ╔═╡ 378a33f2-0695-11eb-3dee-af6f6298edad
@@ -165,7 +194,7 @@ begin
     		title{0.05h} 
 			grid(1,2)
             ]
-	titleplot=plot(title="$name_b over \n $name_a\n(Grey bar is issue age selected above)", leg = false, ticks = nothing, border = :none,titlefontsize=11)
+	titleplot=plot(title="$name_b over \n $name_a\n(Grey bar is issue age selected above)", leg = false, ticks = nothing, border = :none,titlefontsize=9)
 	
 	plot(titleplot,c1,c2,size=(980,400),layout= l)
 	
@@ -185,10 +214,12 @@ pluto-notebook {
 # ╟─7ae73f7e-065e-11eb-1472-b7bc0e5cff29
 # ╟─5322a010-065f-11eb-0864-3d69c92cff6c
 # ╟─d60bc480-065e-11eb-2072-b3ac00e39598
-# ╠═e38d2460-068f-11eb-3d19-e1902fc7b28c
+# ╟─e38d2460-068f-11eb-3d19-e1902fc7b28c
+# ╟─54c92a0c-c8fe-40b5-bcf7-a791c8999b23
 # ╟─968d79c0-0695-11eb-2586-0565817b37a8
 # ╠═dbb88400-065d-11eb-3fe8-9b5b7f873d3e
 # ╠═b6fbd7f0-065f-11eb-1af7-5141be0a585f
+# ╠═4694f4aa-47dc-4148-99e0-62ad3cde88a3
 # ╠═bb15f410-065f-11eb-2342-9319b0ff6237
 # ╠═ad6c9830-068e-11eb-2934-6f460c421895
 # ╠═378a33f2-0695-11eb-3dee-af6f6298edad
