@@ -217,14 +217,6 @@ end
 # ╔═╡ c5078e00-e8b6-11ea-105b-9731d9852664
 scenarios = ThreadsX.map(i -> scenario(start_curve,params), 1:n_scenarios);
 
-# ╔═╡ 076facc0-e9f5-11ea-2fa5-91cfaa965d08
-
-histogram(
-	map(s -> mean(s[:,9]),scenarios),  # average of 20 year rates
-	title="Average Long Rate",
-	xlim=(0,.15),
-	legend=false)
-
 # ╔═╡ 7f7a2280-ea2d-11ea-2ee8-79bc4c3a72ec
  begin
  	p = plot(legend=false,title="Long Rate Paths",ylim=(0,.15))
@@ -234,6 +226,14 @@ histogram(
  	end
  	p
  end
+
+# ╔═╡ 076facc0-e9f5-11ea-2fa5-91cfaa965d08
+
+histogram(
+	map(s -> mean(s[:,9]),scenarios),  # average of 20 year rates
+	title="Average Long Rate",
+	xlim=(0,.15),
+	legend=false)
 
 # ╔═╡ 783904d0-f128-11ea-22f9-43d6dc7b8439
 scenarios[1]
