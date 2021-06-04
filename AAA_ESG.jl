@@ -73,7 +73,7 @@ You can edit these and watch the results change in realtime.
 md"### Scenario Visualization"
 
 # ╔═╡ 56f67070-ea3c-11ea-31f5-b7d1f7182a31
-md"This histogram was inspired by the article [Illuminating the Low Interest Peril](http://digitaleditions.walsworthprintgroup.com/publication/?i=666496&article_id=3715812&view=articleBrowser&ver=html5) in the July 2020 Financial Reporter:"
+md"This histogram was inspired by the article [Illuminating the Low Interest Peril](https://www.soa.org/globalassets/assets/library/newsletters/financial-reporter/2020/july/fr-2020-iss-07.pdf) in the July 2020 Financial Reporter:"
 
 # ╔═╡ 844a9e50-f128-11ea-10b1-a1d7792c8fc4
 md"Example of one of the the scenarios:"
