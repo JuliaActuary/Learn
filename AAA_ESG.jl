@@ -19,6 +19,7 @@ begin
     using UnPack
 	using Plots
 	using Statistics
+	using ActuaryUtilities
 	using ThreadsX # for easy multithreading
 end
 
@@ -217,8 +218,30 @@ end
 # ╔═╡ c5078e00-e8b6-11ea-105b-9731d9852664
 scenarios = ThreadsX.map(i -> scenario(start_curve,params), 1:n_scenarios);
 
+# ╔═╡ 076facc0-e9f5-11ea-2fa5-91cfaa965d08
+let
+	# average and CTE70 of 20 year rates
+	stats = map(s -> (mean= mean(s[:,9]),CTE=CTE(s[:,9],.7,rev=true)),scenarios)
+	histogram(
+		[x.mean for x in stats],  
+		label="Average Long Rate",
+		orientation = :horizontal,
+		alpha=0.5,
+		ylim = (0.,.1),
+		bins = 0.:0.0025:.1,
+		title="Long Rate Distribution"
+	)
+ 		histogram!(
+		[x.CTE for x in stats],
+		alpha=0.5,
+		label="CTE70 of Long Rate",
+		orientation = :horizontal,
+		bins = 0.:0.0025:.1,
+	)
+end
+
 # ╔═╡ 7f7a2280-ea2d-11ea-2ee8-79bc4c3a72ec
- begin
+ let
  	p = plot(legend=false,title="Long Rate Paths",ylim=(0,.15))
 
  	for s in scenarios
@@ -226,14 +249,6 @@ scenarios = ThreadsX.map(i -> scenario(start_curve,params), 1:n_scenarios);
  	end
  	p
  end
-
-# ╔═╡ 076facc0-e9f5-11ea-2fa5-91cfaa965d08
-
-histogram(
-	map(s -> mean(s[:,9]),scenarios),  # average of 20 year rates
-	title="Average Long Rate",
-	xlim=(0,.15),
-	legend=false)
 
 # ╔═╡ 783904d0-f128-11ea-22f9-43d6dc7b8439
 scenarios[1]
@@ -253,8 +268,8 @@ The same disclaimer from the Academy applies:
 # ╟─63507e40-ea34-11ea-00c3-31bd881aa1bc
 # ╟─13c9baf0-ea37-11ea-16d5-f9f87c35e4f4
 # ╟─2cc3d3b0-ea3c-11ea-2c4f-4bd1db712846
-# ╟─7f7a2280-ea2d-11ea-2ee8-79bc4c3a72ec
 # ╟─076facc0-e9f5-11ea-2fa5-91cfaa965d08
+# ╟─7f7a2280-ea2d-11ea-2ee8-79bc4c3a72ec
 # ╟─56f67070-ea3c-11ea-31f5-b7d1f7182a31
 # ╟─844a9e50-f128-11ea-10b1-a1d7792c8fc4
 # ╟─783904d0-f128-11ea-22f9-43d6dc7b8439
