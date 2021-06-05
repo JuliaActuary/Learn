@@ -73,6 +73,11 @@ You can edit these and watch the results change in realtime.
 # ╔═╡ 2cc3d3b0-ea3c-11ea-2c4f-4bd1db712846
 md"### Scenario Visualization"
 
+# ╔═╡ 9a6a036e-b4f1-40a8-b3ea-724a1542fb26
+md"
+#### Long Rate Statistics:
+"
+
 # ╔═╡ 56f67070-ea3c-11ea-31f5-b7d1f7182a31
 md"This histogram was inspired by the article [Illuminating the Low Interest Peril](https://www.soa.org/globalassets/assets/library/newsletters/financial-reporter/2020/july/fr-2020-iss-07.pdf) in the July 2020 Financial Reporter:"
 
@@ -220,24 +225,51 @@ scenarios = ThreadsX.map(i -> scenario(start_curve,params), 1:n_scenarios);
 
 # ╔═╡ 076facc0-e9f5-11ea-2fa5-91cfaa965d08
 let
-	# average and CTE70 of 20 year rates
-	stats = map(s -> (mean= mean(s[:,9]),CTE=CTE(s[:,9],.7,rev=true)),scenarios)
-	histogram(
+	# average and CTE70 and CTE98 of 20 year rates
+	stats = ThreadsX.map(s -> (
+			mean= mean(s[:,9]),
+			CTE70=CTE(s[:,9],.7,rev=true),
+			CTE98=CTE(s[:,9],.98,rev=true)
+			),scenarios)
+	h1 = histogram(
 		[x.mean for x in stats],  
-		label="Average Long Rate",
+		label="",
 		orientation = :horizontal,
 		alpha=0.5,
 		ylim = (0.,.1),
+		ylabel="20-Year Interset Rate",
+		xlim=0:(n_scenarios ÷ 20),
+		xtick=:none,
+		grid=false,
+		title="Mean",
 		bins = 0.:0.0025:.1,
-		title="Long Rate Distribution"
 	)
- 		histogram!(
-		[x.CTE for x in stats],
+ 		h2 = histogram(
+		[x.CTE70 for x in stats],
 		alpha=0.5,
-		label="CTE70 of Long Rate",
+		title="CTE70",
+		label="",
+		ylim = (0.,.1),
+		xlim=0:(n_scenarios ÷ 20),
+		xtick=:none,
+		ytick=:none,
 		orientation = :horizontal,
 		bins = 0.:0.0025:.1,
 	)
+	 	h3 = histogram(
+		[x.CTE98 for x in stats],
+		alpha=0.5,
+		title="CTE98",
+		label="",
+		ylim = (0.,.1),
+		xlim=0:(n_scenarios ÷ 20),
+		xtick=:none,
+				ytick=:none,
+		orientation = :horizontal,
+		
+		bins = 0.:0.0025:.1,
+	)
+	plot([h1,h2,h3]...,layout=(1,3))
 end
 
 # ╔═╡ 7f7a2280-ea2d-11ea-2ee8-79bc4c3a72ec
@@ -268,6 +300,7 @@ The same disclaimer from the Academy applies:
 # ╟─63507e40-ea34-11ea-00c3-31bd881aa1bc
 # ╟─13c9baf0-ea37-11ea-16d5-f9f87c35e4f4
 # ╟─2cc3d3b0-ea3c-11ea-2c4f-4bd1db712846
+# ╟─9a6a036e-b4f1-40a8-b3ea-724a1542fb26
 # ╟─076facc0-e9f5-11ea-2fa5-91cfaa965d08
 # ╟─7f7a2280-ea2d-11ea-2ee8-79bc4c3a72ec
 # ╟─56f67070-ea3c-11ea-31f5-b7d1f7182a31
