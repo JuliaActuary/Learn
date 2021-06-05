@@ -224,6 +224,7 @@ end
 scenarios = ThreadsX.map(i -> scenario(start_curve,params), 1:n_scenarios);
 
 # ╔═╡ 076facc0-e9f5-11ea-2fa5-91cfaa965d08
+# note that the CTE function requires ActuaryUtilities v2.1 or higher
 let
 	# average and CTE70 and CTE98 of 20 year rates
 	stats = ThreadsX.map(s -> (
