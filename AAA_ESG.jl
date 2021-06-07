@@ -239,7 +239,7 @@ let
 		alpha=0.5,
 		ylim = (0.,.1),
 		ylabel="20-Year Interset Rate",
-		xlim=0:(n_scenarios ÷ 20),
+		xlim=(0,(n_scenarios ÷ 20)),
 		xtick=:none,
 		grid=false,
 		title="Mean",
@@ -251,7 +251,7 @@ let
 		title="CTE70",
 		label="",
 		ylim = (0.,.1),
-		xlim=0:(n_scenarios ÷ 20),
+		xlim=(0,(n_scenarios ÷ 20)),
 		xtick=:none,
 		ytick=:none,
 		orientation = :horizontal,
@@ -263,7 +263,7 @@ let
 		title="CTE98",
 		label="",
 		ylim = (0.,.1),
-		xlim=0:(n_scenarios ÷ 20),
+		xlim=(0,(n_scenarios ÷ 20)),
 		xtick=:none,
 				ytick=:none,
 		orientation = :horizontal,
@@ -302,7 +302,7 @@ The same disclaimer from the Academy applies:
 # ╟─13c9baf0-ea37-11ea-16d5-f9f87c35e4f4
 # ╟─2cc3d3b0-ea3c-11ea-2c4f-4bd1db712846
 # ╟─9a6a036e-b4f1-40a8-b3ea-724a1542fb26
-# ╟─076facc0-e9f5-11ea-2fa5-91cfaa965d08
+# ╠═076facc0-e9f5-11ea-2fa5-91cfaa965d08
 # ╟─7f7a2280-ea2d-11ea-2ee8-79bc4c3a72ec
 # ╟─56f67070-ea3c-11ea-31f5-b7d1f7182a31
 # ╟─844a9e50-f128-11ea-10b1-a1d7792c8fc4
