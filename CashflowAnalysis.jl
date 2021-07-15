@@ -144,9 +144,9 @@ md"The time until the project breaks even with a borrowing cost of 5%:"
 
 # ╔═╡ 0badd480-0d48-11eb-3e85-cfecde9d1ad5
 (
-	IRR_A = breakeven(     0.05, project_A),
+	breakeven_A = breakeven(     0.05, project_A),
 	PV_A  = present_value( 0.05, project_A),
-	IRR_B = breakeven(     0.05, project_B),
+	breakeven_B = breakeven(     0.05, project_B),
 	PV_B  = present_value( 0.05, project_B),
 )
 
