@@ -10,7 +10,7 @@ Which wasn't concretely defined, but I think the "Life Modeling Problem" has the
 
 Folks started submitting versions of a toy problem with the first two characteristics to showcase different approaches and languages.
 
-The following was benchmarked on 2020 Macbook Air (M1) with all  compatible with the new M1 chip. Times are nanoseconds:
+The following was benchmarked on 2020 Macbook Air (M1) with all languages using native M1 versions. Times are nanoseconds:
 
 ```
 ┌────────────────┬─────────────┬───────────────┬──────────┬──────────┐
