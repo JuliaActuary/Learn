@@ -1,4 +1,5 @@
 
+# Numpy Vecotrized
 # Via Houstonwp
 import timeit
 setup='''
@@ -23,7 +24,8 @@ benchmark = '''npv(q,w,P,S,r)'''
 
 print(timeit.timeit(stmt=benchmark,setup=setup,number = 1000000))
 
-# 
+# Python Accumulator
+# Via Houstonwp
 setuploop='''
 q = [0.001,0.002,0.003,0.003,0.004,0.004,0.005,0.007,0.009,0.011]
 w = [0.05,0.07,0.08,0.10,0.14,0.20,0.20,0.20,0.10,0.04]
@@ -43,5 +45,3 @@ def npv_loop(q,w,P,S,r):
 
 '''
 benchmarkloop = '''npv_loop(q,w,P,S,r)'''
-
-print(timeit.timeit(stmt=benchmarkloop,setup=setuploop,number = 1000000))
