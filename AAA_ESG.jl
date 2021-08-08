@@ -311,7 +311,7 @@ ThreadsX = "ac1d9e8a-700a-412c-b207-f0111f4b6c0d"
 UnPack = "3a884ed6-31ef-47d7-9d2a-63182c4928ed"
 
 [compat]
-ActuaryUtilities = "~2.2.2"
+ActuaryUtilities = "~2.2.3"
 Plots = "~1.19.1"
 ThreadsX = "~0.1.7"
 UnPack = "~1.0.2"
@@ -323,9 +323,9 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 [[ActuaryUtilities]]
 deps = ["Dates", "ForwardDiff", "QuadGK", "Roots", "StatsBase", "Yields"]
-git-tree-sha1 = "ab70524cf0f6f87450ce316e2fdc2802fc9dbf6d"
+git-tree-sha1 = "b2bd57203bd96fc7026a719473bae0287ea311a2"
 uuid = "bdd23359-8b1c-4f88-b89b-d11982a786f4"
-version = "2.2.2"
+version = "2.2.3"
 
 [[Adapt]]
 deps = ["LinearAlgebra"]
@@ -620,10 +620,10 @@ deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
 [[Interpolations]]
-deps = ["AxisAlgorithms", "LinearAlgebra", "OffsetArrays", "Random", "Ratios", "SharedArrays", "SparseArrays", "StaticArrays", "WoodburyMatrices"]
-git-tree-sha1 = "1e0e51692a3a77f1eeb51bf741bdd0439ed210e7"
+deps = ["AxisAlgorithms", "ChainRulesCore", "LinearAlgebra", "OffsetArrays", "Random", "Ratios", "Requires", "SharedArrays", "SparseArrays", "StaticArrays", "WoodburyMatrices"]
+git-tree-sha1 = "61aa005707ea2cebf47c8d780da8dc9bc4e0c512"
 uuid = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
-version = "0.13.2"
+version = "0.13.4"
 
 [[IterTools]]
 git-tree-sha1 = "05110a2ab1fc5f932622ffea2a003221f4782c18"

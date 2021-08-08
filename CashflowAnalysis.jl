@@ -130,9 +130,6 @@ let
 end
 	
 
-# ╔═╡ 830f0c60-0d48-11eb-3ba3-d970a349fa6a
-
-
 # ╔═╡ e69b7940-0d47-11eb-13a4-7f437899aafa
 (
 	IRR_A = irr(project_A),
@@ -185,7 +182,7 @@ PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 Yields = "d7e99b2f-e7f3-4d9e-9f01-2338fc023ad3"
 
 [compat]
-ActuaryUtilities = "~2.2.2"
+ActuaryUtilities = "~2.2.3"
 Plots = "~1.19.0"
 PlutoUI = "~0.7.9"
 Yields = "~0.5.0"
@@ -197,9 +194,9 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 [[ActuaryUtilities]]
 deps = ["Dates", "ForwardDiff", "QuadGK", "Roots", "StatsBase", "Yields"]
-git-tree-sha1 = "ab70524cf0f6f87450ce316e2fdc2802fc9dbf6d"
+git-tree-sha1 = "b2bd57203bd96fc7026a719473bae0287ea311a2"
 uuid = "bdd23359-8b1c-4f88-b89b-d11982a786f4"
-version = "2.2.2"
+version = "2.2.3"
 
 [[Adapt]]
 deps = ["LinearAlgebra"]
@@ -453,10 +450,10 @@ deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
 [[Interpolations]]
-deps = ["AxisAlgorithms", "LinearAlgebra", "OffsetArrays", "Random", "Ratios", "SharedArrays", "SparseArrays", "StaticArrays", "WoodburyMatrices"]
-git-tree-sha1 = "1e0e51692a3a77f1eeb51bf741bdd0439ed210e7"
+deps = ["AxisAlgorithms", "ChainRulesCore", "LinearAlgebra", "OffsetArrays", "Random", "Ratios", "Requires", "SharedArrays", "SparseArrays", "StaticArrays", "WoodburyMatrices"]
+git-tree-sha1 = "61aa005707ea2cebf47c8d780da8dc9bc4e0c512"
 uuid = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
-version = "0.13.2"
+version = "0.13.4"
 
 [[IterTools]]
 git-tree-sha1 = "05110a2ab1fc5f932622ffea2a003221f4782c18"
@@ -1134,7 +1131,6 @@ version = "0.9.1+5"
 # ╟─388a29ee-0d47-11eb-10dc-6fc8ee792c5e
 # ╟─0e8d432e-0d47-11eb-3eb0-ffd26ebdbd0e
 # ╟─2bb71532-0d47-11eb-1bf8-59387e9c40a5
-# ╠═830f0c60-0d48-11eb-3ba3-d970a349fa6a
 # ╠═e69b7940-0d47-11eb-13a4-7f437899aafa
 # ╟─70aa2fa0-0d48-11eb-00b9-114c73cc50ee
 # ╠═0badd480-0d48-11eb-3e85-cfecde9d1ad5
