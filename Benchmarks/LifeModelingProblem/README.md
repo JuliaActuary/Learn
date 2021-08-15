@@ -14,15 +14,15 @@ The following was benchmarked on 2020 Macbook Air (M1) with all languages using 
 
 ```
 ┌────────────────┬─────────────┬───────────────┬──────────┬──────────┐
-│           lang │   algorithm │ function_name │   median │     mean │
-│         String │      String │        String │ Float64? │ Float64? │
+│       Language │   Algorithm │ Function Name │   Median │     Mean │
 ├────────────────┼─────────────┼───────────────┼──────────┼──────────┤
 │ R (data.table) │  Vectorized │           npv │ 770554.0 │ 842767.3 │
 │              R │  Vectorized │      npv base │   4264.0 │  46617.0 │
 │              R │ Accumulator │      npv_loop │   4346.0 │  62275.7 │
 │           Rust │ Accumulator │           npv │     24.0 │  missing │
-│ Python (NumPy) │  Vectorized │           npv │  missing │   6823.3 │
-│         Python │ Accumulator │      npv_loop │  missing │   1486.0 │
+│ Python (NumPy) │  Vectorized │           npv │  missing │  14261.0 │
+│         Python │ Accumulator │      npv_loop │  missing │   2314.0 │
+│ Python (Numba) │ Accumulator │     npv_numba │  missing │    626.0 │
 │          Julia │  Vectorized │          npv1 │    235.3 │    228.2 │
 │          Julia │  Vectorized │          npv2 │    235.8 │    218.4 │
 │          Julia │ Accumulator │          npv3 │     14.5 │     14.5 │
@@ -33,4 +33,5 @@ The following was benchmarked on 2020 Macbook Air (M1) with all languages using 
 │          Julia │ Accumulator │          npv8 │      7.4 │      7.4 │
 │          Julia │ Accumulator │          npv9 │      6.4 │      6.4 │
 └────────────────┴─────────────┴───────────────┴──────────┴──────────┘
+
 ```
