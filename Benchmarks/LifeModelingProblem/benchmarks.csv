@@ -3,8 +3,9 @@ R (data.table),Vectorized,npv,770554.0,842767.3
 R,Vectorized,npv base,4264.0,46617.
 R,Accumulator,npv_loop,4346.0,62275.72,
 Rust,Accumulator,npv,24.0,
-Python (NumPy),Vectorized,npv,,6823.250583999999
-Python,Accumulator,npv_loop,,1486.0355
+Python (NumPy),Vectorized,npv,,14261
+Python,Accumulator,npv_loop,,2314
+Python (Numba),Accumulator,npv_numba,,626
 Julia,Vectorized,npv1,235.322,228.198
 Julia,Vectorized,npv2,235.758,218.391
 Julia,Accumulator,npv3,14.507,14.487
