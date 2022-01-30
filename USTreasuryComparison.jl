@@ -33,6 +33,13 @@ md"""
 Select dates below. Data refreshes from Treasury.gov upon notebook start.
 """
 
+# ╔═╡ c312c6f7-717a-474a-ab26-5c45365168d1
+md"## Comparison
+This table shows the change in zero rates:"
+
+# ╔═╡ 6fab0540-d832-4e33-96b5-3db23d119c73
+md" This plot shows the zero rates (sometimes you'll see the chart with par rates used in some contexts):"
+
 # ╔═╡ 6f89a33c-dbaa-4feb-8665-db491c6aaf24
 md"## Utils"
 
@@ -54,11 +61,13 @@ cmt_xml = root(parsexml(read(cmt_file, String)))
 
 # ╔═╡ 1fd420e8-bae8-479e-9266-19426407094d
 curves = let 
+	# map across each term and parse the found rates 
 	rates = map(terms) do term
 		str = nodecontent.(findall("//d:BC_$term", cmt_xml))
 		Parsers.tryparse.(Float64, str)
 	end
 
+	# get the date strings and parse them
 	dates_str = nodecontent.(findall("//d:NEW_DATE", cmt_xml))
 	dates = map(d -> Date(d[1:10]),dates_str)
 
@@ -67,15 +76,20 @@ curves = let
 	@assert length(dates) == length(rates[1])
 
 
+	# combine into a matrix
 	rates = hcat(rates...)
-		
-		ismissing = map(eachrow(rates)) do r
-			any(isnothing.(r))
-		end
 
+	# create a filter for dates with missing (`nothing`) values
+	ismissing = map(eachrow(rates)) do r
+		any(isnothing.(r))
+	end
+
+	# turns the percents into rates and boostrap the CMT curve
 	rates = identity.(rates[.~ismissing,:]) ./ 100
 	dates = dates[.~ismissing]
 	curves = [Yields.CMT(rates[i,:],term_times) for i in 1:length(dates)]
+
+	# return an ordered Dictionary from Dictionaries.jl
 	dictionary(zip(dates,curves) )
 end
 
@@ -122,7 +136,7 @@ let
 
 		clatest = curves[dlatest]
 		zlatest = map(t -> rate(zero(clatest,t)),term_times)
-		plot!(p,term_times,zlatest,label="$dlatest latest",l=(3,0.5,:dot))
+		plot!(p,term_times,zlatest,label="$dlatest (latest)",l=(3,0.5,:dot))
 	end
 	p
 end
@@ -152,9 +166,9 @@ Yields = "~0.9.5"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.8.0-DEV.1405"
+julia_version = "1.8.0-DEV.1432"
 manifest_format = "2.0"
-project_hash = "9deeeadb9acd4bc4ba9725a9e890ac1e2f55de71"
+project_hash = "ab4e1cc3425043922f5346242479f1a0a76f6f2b"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -1206,10 +1220,12 @@ version = "0.9.1+5"
 # ╟─6f855077-18eb-44c0-8a34-202716516701
 # ╟─d1e4b3df-1a09-45bf-8ad4-fe46a7b600e0
 # ╟─98df3355-8546-4b75-8396-4dabc2220496
+# ╟─c312c6f7-717a-474a-ab26-5c45365168d1
 # ╟─f2251c5d-9185-4693-b5e3-95ac76b31b9a
-# ╠═eb9c951b-ffad-4134-bbbd-eb97e5fff52e
+# ╟─6fab0540-d832-4e33-96b5-3db23d119c73
+# ╟─eb9c951b-ffad-4134-bbbd-eb97e5fff52e
 # ╟─6f89a33c-dbaa-4feb-8665-db491c6aaf24
-# ╟─78694dd8-e829-48da-81a8-69b0dc2b701f
+# ╠═78694dd8-e829-48da-81a8-69b0dc2b701f
 # ╟─a3d6205f-2509-4fdc-8de8-d62dc140acd0
 # ╟─950943c0-6396-4958-9f1b-d7f0be23fdfd
 # ╟─e59a2504-2960-4317-86ba-fdbad53c1676
