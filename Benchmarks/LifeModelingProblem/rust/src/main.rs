@@ -4,7 +4,7 @@ extern crate test;
 use test::Bencher;
 
 // Via Paddy Horan
-pub fn npv(mortality_rates: &Vec<f64>, lapse_rates: &Vec<f64>, interest_rate: f64, sum_assured: f64, premium: f64, init_pols: f64, term: Option<usize>) -> f64 {
+pub fn npv1(mortality_rates: &Vec<f64>, lapse_rates: &Vec<f64>, interest_rate: f64, sum_assured: f64, premium: f64, init_pols: f64, term: Option<usize>) -> f64 {
 
     let term = term.unwrap_or_else(|| mortality_rates.len());
     let mut result = 0.0;
@@ -60,7 +60,7 @@ let r: f64 = 0.02;
     b.iter(|| {
         // use `test::black_box` to prevent compiler optimizations from disregarding
         // unused values
-        test::black_box(npv(&q,&w,r,s,p,1.0,Some(10)));
+        test::black_box(npv1(&q,&w,r,s,p,1.0,Some(10)));
     });
 }
 
