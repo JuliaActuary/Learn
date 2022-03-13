@@ -21,9 +21,9 @@ The following was benchmarked on 2020 Macbook Air (M1) with all languages using 
 │              R │ Accumulator │      npv_loop │   4346.0 │  62275.7 │
 │           Rust │ Accumulator │           npv │     22.0 │     22.0 │
 │           Rust │ Accumulator │           npv │     14.0 │     14.0 │
-│ Python (NumPy) │  Vectorized │           npv │  missing │  14261.0 │
-│         Python │ Accumulator │      npv_loop │  missing │   2314.0 │
-│ Python (Numba) │ Accumulator │     npv_numba │  missing │    626.0 │
+│ Python (NumPy) │  Vectorized │           npv │  missing │  14437.0 │
+│         Python │ Accumulator │      npv_loop │  missing │   2197.0 │
+│ Python (Numba) │ Accumulator │     npv_numba │  missing │    388.0 │
 │          Julia │  Vectorized │          npv1 │    235.3 │    228.2 │
 │          Julia │  Vectorized │          npv2 │    235.8 │    218.4 │
 │          Julia │ Accumulator │          npv3 │     14.5 │     14.5 │
@@ -42,4 +42,11 @@ The following was benchmarked on 2020 Macbook Air (M1) with all languages using 
 ```
 ❯ rustc --version                                                                                                    (base)
 rustc 1.61.0-nightly (f103b2969 2022-03-12)
+```
+
+## Python
+
+```
+❯ python --version                                                                                                   (base)
+Python 3.9.7
 ```

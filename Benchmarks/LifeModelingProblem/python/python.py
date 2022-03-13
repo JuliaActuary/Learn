@@ -82,4 +82,4 @@ def npv_numba(q, w, P, S, r):
 npv_numba(q, w, P, S, r)
 '''
 bm_res_numba = timeit.timeit(stmt='''npv_numba(q, w, P, S, r)''', setup=setup_numba, number=1000000)
-print(f"Numpy Vectorized: {bm_res_numba:0.3f}")
+print(f"Numba Accumulator: {bm_res_numba:0.3f}")
