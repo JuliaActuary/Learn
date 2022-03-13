@@ -10,6 +10,7 @@ pub fn npv(mortality_rates: &Vec<f64>, lapse_rates: &Vec<f64>, interest_rate: f6
     let mut result = 0.0;
     let mut inforce = init_pols;
     let v: f64 = 1.0 / (1.0 + interest_rate);
+    let mut discount_factor: f64 = 1.0;
 
     for (t, (q, w)) in mortality_rates.iter().zip(lapse_rates).enumerate() {
         let no_deaths = if t < term {inforce * q} else {0.0};
@@ -17,7 +18,8 @@ pub fn npv(mortality_rates: &Vec<f64>, lapse_rates: &Vec<f64>, interest_rate: f6
         let premiums = inforce * premium;
         let claims = no_deaths * sum_assured;
         let net_cashflow = premiums - claims;
-        result += net_cashflow * v.powi(t as i32);
+        result += net_cashflow * discount_factor;
+		discount_factor *= v;
         inforce = inforce - no_deaths - no_lapses;
     }
 
