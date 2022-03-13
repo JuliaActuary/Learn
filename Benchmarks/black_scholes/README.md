@@ -13,4 +13,3 @@ The following was benchmarked on 2020 Macbook Air (M1) with all languages using 
 │    Julia │    41.0 │        41.6 │           1.0 │
 └──────────┴─────────┴─────────────┴───────────────┘
 ```
-R      ,3649.0 ,3855.23
