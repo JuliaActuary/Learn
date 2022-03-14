@@ -21,6 +21,7 @@ The following was benchmarked on 2020 Macbook Air (M1) with all languages using 
 │              R │ Accumulator │      npv_loop │   4346.0 │  62275.7 │
 │           Rust │ Accumulator │          npv1 │     22.0 │     22.0 │
 │           Rust │ Accumulator │          npv2 │     14.0 │     14.0 │
+│           Rust │ Accumulator │          npv3 │      7.0 │      7.0 │
 │ Python (NumPy) │  Vectorized │           npv │  missing │  14437.0 │
 │         Python │ Accumulator │      npv_loop │  missing │   2197.0 │
 │ Python (Numba) │ Accumulator │     npv_numba │  missing │    388.0 │
