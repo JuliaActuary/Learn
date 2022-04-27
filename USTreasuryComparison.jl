@@ -43,11 +43,11 @@ md"## Utils
 The download and parsing functions to get the rates:"
 
 # ╔═╡ 78694dd8-e829-48da-81a8-69b0dc2b701f
-term_times = [1/12,2/12,3/12,6/12,1,2,3,5,7,10,20,30]
+tenors = [1/12,3/12,6/12,1,2,3,5,7,10,20,30]
 
 # ╔═╡ a3d6205f-2509-4fdc-8de8-d62dc140acd0
 terms = [
-	"1MONTH","2MONTH","3MONTH","6MONTH","1YEAR",
+	"1MONTH","3MONTH","6MONTH","1YEAR",
 	"2YEAR","3YEAR","5YEAR","7YEAR","10YEAR",
 	"20YEAR","30YEAR"
 	]
@@ -104,18 +104,18 @@ end;
 # ╔═╡ eb9c951b-ffad-4134-bbbd-eb97e5fff52e
 let 
 	
-	z1 = map(t -> rate(zero(c1,t)),term_times)
-	z2 = map(t -> rate(zero(c2,t)),term_times)
+	z1 = map(t -> rate(zero(c1,t)),tenors)
+	z2 = map(t -> rate(zero(c2,t)),tenors)
 	
-	p = plot(term_times,z1,label=d1,legend=:bottomright,
+	p = plot(tenors,z1,label=d1,legend=:bottomright,
 		ylabel="zero rate",xlabel="maturity")
-	plot!(p,term_times,z2,label=d2,)
+	plot!(p,tenors,z2,label=d2,)
 
 	dlatest = last(dates)
 	if dlatest ∉ [d1,d2]
 
-		zlatest = map(t -> rate(zero(clatest,t)),term_times)
-		plot!(p,term_times,zlatest,label="$(last(dates)) (latest)",l=(3,0.5,:dot))
+		zlatest = map(t -> rate(zero(clatest,t)),tenors)
+		plot!(p,tenors,zlatest,label="$(last(dates)) (latest)",l=(3,0.5,:dot))
 	end
 	p
 end
@@ -126,11 +126,11 @@ df_compare = let
 	c1 = curve(cmt_data,d1)
 	c2 = curve(cmt_data,d2)
 	
-	z1 = map(t -> rate(zero(c1,t)),term_times)
-	z2 = map(t -> rate(zero(c2,t)),term_times)
+	z1 = map(t -> rate(zero(c1,t)),tenors)
+	z2 = map(t -> rate(zero(c2,t)),tenors)
 	
 	DataFrame(
-		terms = term_times,
+		terms = tenors,
 		termname = terms,
 		d1 = z1,
 		d2 = z2,
@@ -1364,12 +1364,12 @@ version = "0.9.1+5"
 # ╟─6fab0540-d832-4e33-96b5-3db23d119c73
 # ╟─eb9c951b-ffad-4134-bbbd-eb97e5fff52e
 # ╟─6f89a33c-dbaa-4feb-8665-db491c6aaf24
-# ╟─78694dd8-e829-48da-81a8-69b0dc2b701f
+# ╠═78694dd8-e829-48da-81a8-69b0dc2b701f
 # ╟─a3d6205f-2509-4fdc-8de8-d62dc140acd0
 # ╟─950943c0-6396-4958-9f1b-d7f0be23fdfd
 # ╟─c61a2955-1701-44a7-bae3-2be7496a7696
 # ╟─1c64e087-0ace-409a-9fb6-1a7ebf241acc
-# ╟─1a51c64e-4cf7-4b6a-8d0d-d9757b487fef
+# ╠═1a51c64e-4cf7-4b6a-8d0d-d9757b487fef
 # ╠═1a93d472-8051-11ec-211c-7d342b527e06
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
