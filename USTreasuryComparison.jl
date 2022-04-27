@@ -20,9 +20,7 @@ begin
 	using CSV
 	using PlutoUI
 	using Plots
-	using Parsers
 	using Dates
-	using Dictionaries
 	using DataFrames
 end
 
@@ -147,8 +145,6 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
-Dictionaries = "85a47980-9c8c-11e8-2b9f-f7ca1fa99fb4"
-Parsers = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 Yields = "d7e99b2f-e7f3-4d9e-9f01-2338fc023ad3"
@@ -156,8 +152,6 @@ Yields = "d7e99b2f-e7f3-4d9e-9f01-2338fc023ad3"
 [compat]
 CSV = "~0.10.4"
 DataFrames = "~1.3.2"
-Dictionaries = "~0.3.18"
-Parsers = "~2.2.2"
 Plots = "~1.25.11"
 PlutoUI = "~0.7.34"
 Yields = "~1.1.0"
@@ -169,7 +163,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.0-DEV"
 manifest_format = "2.0"
-project_hash = "2645ae21083fb8e35cab9a02829b11cd94ba195c"
+project_hash = "f6b0c98c4326fdc083e1bfc63402ccb8e1f60e41"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -350,12 +344,6 @@ uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 [[deps.DelimitedFiles]]
 deps = ["Mmap"]
 uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
-
-[[deps.Dictionaries]]
-deps = ["Indexing", "Random"]
-git-tree-sha1 = "0340cee29e3456a7de968736ceeb705d591875a2"
-uuid = "85a47980-9c8c-11e8-2b9f-f7ca1fa99fb4"
-version = "0.3.20"
 
 [[deps.DiffResults]]
 deps = ["StaticArrays"]
@@ -562,11 +550,6 @@ deps = ["Logging", "Random"]
 git-tree-sha1 = "f7be53659ab06ddc986428d3a9dcc95f6fa6705a"
 uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
 version = "0.2.2"
-
-[[deps.Indexing]]
-git-tree-sha1 = "ce1566720fd6b19ff3411404d4b977acd4814f9f"
-uuid = "313cdc1a-70c2-5d6a-ae34-0150d3930a38"
-version = "1.1.1"
 
 [[deps.IniFile]]
 git-tree-sha1 = "f550e6e32074c939295eb5ea6de31849ac2c9625"
