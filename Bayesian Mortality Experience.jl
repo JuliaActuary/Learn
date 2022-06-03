@@ -235,9 +235,10 @@ let
 	ages = sort!(unique(data.att_age))
 	
 	for i in 1:n
-		a = sample(chain2,1)[:a][1]
-		b = sample(chain2,1)[:b][1]
-		k = sample(chain2,1)[:k][1]
+		s = sample(chain2,1)
+		a = only(s[:a])
+		b = only(s[:b])
+		k = only(s[:k])
 		c = 0
 		m = MortalityTables.MakehamBeard(;a,b,c,k)
 		plot!(ages,age -> MortalityTables.hazard(m,age), alpha = 0.1,label="")
