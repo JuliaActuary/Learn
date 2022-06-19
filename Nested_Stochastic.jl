@@ -182,7 +182,7 @@ md"## Endnotes
 
 ### Further Work
 
-This example is simple, but could be greatly optimized to reduce intermediate variable allocations, refine the timing of cashflows, add additional decrements, handle different types of `Policy`s, etc.
+This example is simple, but could be greatly optimized to reduce intermediate variable allocations, refine the timing of cashflows, add additional decrements, handle different types of `Policy`s, abstract some of the projection mechanics into an `Iterable` object, etc.
 
 ### Disclaimer
 Created as a proof of concept and not indended to be interpreted as a meaningful projection."
