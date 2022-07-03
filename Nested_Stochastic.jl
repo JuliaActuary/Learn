@@ -5,26 +5,29 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ fbce1e27-45db-465d-83f0-a0a7935abf14
-using ActuaryUtilities
-
-# ╔═╡ 2f700532-bc7b-4408-8268-f9f632a75451
-using DataFrames
-
-# ╔═╡ a3a5b911-1097-454a-b0ec-463874be92b4
-using Setfield
+begin
+	using ActuaryUtilities
+	using DataFrames
+	using Setfield
+end
 
 # ╔═╡ ba85bf56-5401-4430-a0e2-eef7e06347a5
-md" # Nested Projection Mechanics
+md""" # Nested Projection Mechanics
 
 A simple example of how one could define a nested projection system. Includes the following examples:
 - Outer loop policy projections only
 - Outer + Inner loop policy projections with padded cashflows determining reserves and capital
 - Outer + Inner loop with a stochastic interest rate for the reserves
 
-"
+In this notebook, we define a term life policy, implement the mechanics for "outer" projected values, as well as "inner" projections so that we can determine a projection-based reserve. This is done with both a determinstic and stochastic "inner" loop.
+"""
 
 # ╔═╡ 1f4e28e0-c2f0-4c06-a9f8-d0d71999114a
-md" ## Policy Data & Methods"
+md" ## Policy Data & Methods
+
+We will use a simple Term policy as an example for the mechanics. We don't need to, but to illustrate that we could easily implement different product types, we first define an `abstract type` for `Policy`s, and then the specific `Term` implementation.
+
+The type annotations aren't strictly necessary, but knowing the types in advance helps Julia specialize the code for it."
 
 # ╔═╡ 001d049c-efd2-11ec-0083-cff70f84b072
 abstract type Policy end
@@ -39,7 +42,9 @@ end
 
 # ╔═╡ 50569a1e-5deb-48b6-be72-5be41dcb5b43
 md"""
-For consistency, use the function signature of:
+### Policy mechanics
+
+For consistency across different calculated amounts, we will keep the function signature consistent, even if not all of the arguments are used:
 
 ```
 (policy,assumptions,time) -> result
@@ -59,7 +64,9 @@ deaths(pol::Term,assumptions,time) = pol.inforce * qx(pol,assumptions,time)
 claims(pol::Term,assumptions,time) = deaths(pol,assumptions,time) * pol.face
 
 # ╔═╡ 1f59e516-4dc1-450e-87a4-9ce6ac64029d
-md" ## Projection Assumptions"
+md" ## Projection Assumptions
+
+We define some global assumptions that get passed around. It's good practice (and performant) to pass variables into functions instead of just referring to global variable values."
 
 # ╔═╡ dde19062-8a22-4caa-ae68-23895628dc3e
 assumptions = (
@@ -67,6 +74,12 @@ assumptions = (
 	int_reserve = 0.02,
 	capital_factor = 0.1, # rate * reserves
 )
+
+# ╔═╡ 19e3a49e-ccb3-45a6-9bbd-7ac1bf3b93c9
+md"### Innerloop assumption
+
+In this example, we're assuming just a PADed mortality rate for the innerloop. We take the assumption set and use `Setfield.@set` to return a new immutable named tuple with just that value modified:
+"
 
 # ╔═╡ 18e32b95-2d13-4502-8500-48b0c380291c
 innerloop_assumption(outer_assump) = @set outer_assump.q *= 1.2
@@ -128,6 +141,9 @@ function run_inner(policy,assumptions,result)
 end
 
 
+# ╔═╡ 295f57d0-59ae-4f50-9b5d-fce8df76be5c
+md" And a stochastic version:"
+
 # ╔═╡ 324be56b-512b-4664-9f5b-943b6d9aeade
 # Function signature: (policy, assumptions, result) -> updated result
 function run_inner_stochastic(policy,assumptions,result)
@@ -161,9 +177,6 @@ p = Term(1.,120,1300.,100_000.)
 
 # ╔═╡ b5013701-848a-4920-b4f5-360815a9f2e2
 md" A projection without any additional processing:"
-
-# ╔═╡ 1d59569f-c56b-45d0-ae57-ead57f68ed7b
-project(p,outerloop_assumptions) |> DataFrame
 
 # ╔═╡ 7dd4015f-6b58-4cf2-af3f-30bf3d43d468
 md" And an example which uses a PADed inner loop to determine the resserves and capital:"
@@ -224,15 +237,15 @@ uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
 
 [[deps.ArrayInterfaceCore]]
 deps = ["LinearAlgebra", "SparseArrays", "SuiteSparse"]
-git-tree-sha1 = "d618d3cf75e8ed5064670e939289698ecf426c7f"
+git-tree-sha1 = "7d255eb1d2e409335835dc8624c35d97453011eb"
 uuid = "30b0a656-2188-435a-8636-2ec0e6a096e2"
-version = "0.1.12"
+version = "0.1.14"
 
 [[deps.ArrayLayouts]]
 deps = ["FillArrays", "LinearAlgebra", "SparseArrays"]
-git-tree-sha1 = "ce5666a4081cfb66035a1a46e45a34ce889bac26"
+git-tree-sha1 = "26c659b14c4dc109b6b9c3398e4455eebc523814"
 uuid = "4c555306-a7a7-4459-81d9-ec55ddd5c99a"
-version = "0.8.7"
+version = "0.8.8"
 
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
@@ -277,9 +290,9 @@ version = "0.5.1"
 
 [[deps.ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
-git-tree-sha1 = "9489214b993cd42d17f44c36e359bf6a7c919abf"
+git-tree-sha1 = "2dd813e5f2f7eec2d1268c57cf2373d3ee91fcea"
 uuid = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
-version = "1.15.0"
+version = "1.15.1"
 
 [[deps.ChangesOfVariables]]
 deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
@@ -328,9 +341,9 @@ uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
 
 [[deps.ConstructionBase]]
 deps = ["LinearAlgebra"]
-git-tree-sha1 = "f74e9d5388b8620b4cee35d4c5a618dd4dc547f4"
+git-tree-sha1 = "c096d0e321368ac23eb1be1ea405814f8b32adb3"
 uuid = "187b0558-2788-49d3-abe0-74a17ed4e7c9"
-version = "1.3.0"
+version = "1.3.1"
 
 [[deps.Contour]]
 deps = ["StaticArrays"]
@@ -397,9 +410,9 @@ uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 
 [[deps.Distributions]]
 deps = ["ChainRulesCore", "DensityInterface", "FillArrays", "LinearAlgebra", "PDMats", "Printf", "QuadGK", "Random", "SparseArrays", "SpecialFunctions", "Statistics", "StatsBase", "StatsFuns", "Test"]
-git-tree-sha1 = "0ec161f87bf4ab164ff96dfacf4be8ffff2375fd"
+git-tree-sha1 = "d530092b57aef8b96b27694e51c575b09c7f0b2e"
 uuid = "31c24e10-a181-5473-b8eb-7969acd0382f"
-version = "0.25.62"
+version = "0.25.64"
 
 [[deps.DocStringExtensions]]
 deps = ["LibGit2"]
@@ -443,9 +456,9 @@ version = "0.13.2"
 
 [[deps.FiniteDiff]]
 deps = ["ArrayInterfaceCore", "LinearAlgebra", "Requires", "SparseArrays", "StaticArrays"]
-git-tree-sha1 = "a0700c21266b55bf62c22e75af5668aa7841b500"
+git-tree-sha1 = "ee13c773ce60d9e95a6c6ea134f25605dce2eda3"
 uuid = "6a86dc24-6348-571c-b903-95158fe2bd41"
-version = "2.12.1"
+version = "2.13.0"
 
 [[deps.FixedPointNumbers]]
 deps = ["Statistics"]
@@ -543,9 +556,9 @@ version = "1.4.1"
 
 [[deps.LazyArrays]]
 deps = ["ArrayLayouts", "FillArrays", "LinearAlgebra", "MacroTools", "MatrixFactorizations", "SparseArrays", "StaticArrays"]
-git-tree-sha1 = "721bebe4d0f8581c18fccf272c62000e22a80a2d"
+git-tree-sha1 = "d9a962fac652cc6b0224622b18199f0ed46d316a"
 uuid = "5078a376-72f3-5289-bfd5-ec5146d43c02"
-version = "0.22.10"
+version = "0.22.11"
 
 [[deps.LazyModules]]
 git-tree-sha1 = "a560dd966b386ac9ae60bdd3a3d3a326062d3c3e"
@@ -650,9 +663,9 @@ uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 
 [[deps.OffsetArrays]]
 deps = ["Adapt"]
-git-tree-sha1 = "ec2e30596282d722f018ae784b7f44f3b88065e4"
+git-tree-sha1 = "1ea784113a6aa054c5ebd95945fa5e52c2f378e7"
 uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
-version = "1.12.6"
+version = "1.12.7"
 
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
@@ -687,9 +700,9 @@ version = "1.4.1"
 
 [[deps.PDMats]]
 deps = ["LinearAlgebra", "SparseArrays", "SuiteSparse"]
-git-tree-sha1 = "3e32c8dbbbe1159a5057c80b8a463369a78dd8d8"
+git-tree-sha1 = "ca433b9e2f5ca3a0ce6702a032fce95a3b6e1e48"
 uuid = "90014a1f-27ba-587c-ab20-58faa44d9150"
-version = "0.11.12"
+version = "0.11.14"
 
 [[deps.Parameters]]
 deps = ["OrderedCollections", "UnPack"]
@@ -814,10 +827,15 @@ uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
 version = "2.1.6"
 
 [[deps.StaticArrays]]
-deps = ["LinearAlgebra", "Random", "Statistics"]
-git-tree-sha1 = "2bbd9f2e40afd197a1379aef05e0d85dba649951"
+deps = ["LinearAlgebra", "Random", "StaticArraysCore", "Statistics"]
+git-tree-sha1 = "9f8a5dc5944dc7fbbe6eb4180660935653b0a9d9"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "1.4.7"
+version = "1.5.0"
+
+[[deps.StaticArraysCore]]
+git-tree-sha1 = "66fe9eb253f910fe8cf161953880cfdaef01cdf0"
+uuid = "1e83bf80-4336-4d27-bf5d-d5a4f845583c"
+version = "1.0.1"
 
 [[deps.Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
@@ -831,9 +849,9 @@ version = "1.4.0"
 
 [[deps.StatsBase]]
 deps = ["DataAPI", "DataStructures", "LinearAlgebra", "LogExpFunctions", "Missings", "Printf", "Random", "SortingAlgorithms", "SparseArrays", "Statistics", "StatsAPI"]
-git-tree-sha1 = "8977b17906b0a1cc74ab2e3a05faa16cf08a8291"
+git-tree-sha1 = "48598584bacbebf7d30e20880438ed1d24b7c7d6"
 uuid = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
-version = "0.33.16"
+version = "0.33.18"
 
 [[deps.StatsFuns]]
 deps = ["ChainRulesCore", "HypergeometricFunctions", "InverseFunctions", "IrrationalConstants", "LogExpFunctions", "Reexport", "Rmath", "SpecialFunctions"]
@@ -843,9 +861,9 @@ version = "1.0.1"
 
 [[deps.StructArrays]]
 deps = ["Adapt", "DataAPI", "StaticArrays", "Tables"]
-git-tree-sha1 = "9097e2914e179ab1d45330403fae880630acea0b"
+git-tree-sha1 = "ec47fb6069c57f1cee2f67541bf8f23415146de7"
 uuid = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
-version = "0.6.9"
+version = "0.6.11"
 
 [[deps.SuiteSparse]]
 deps = ["Libdl", "LinearAlgebra", "Serialization", "SparseArrays"]
@@ -895,9 +913,9 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 [[deps.UnicodePlots]]
 deps = ["ColorTypes", "Contour", "Crayons", "Dates", "FileIO", "FreeTypeAbstraction", "LazyModules", "LinearAlgebra", "MarchingCubes", "NaNMath", "Printf", "SparseArrays", "StaticArrays", "StatsBase", "Unitful"]
-git-tree-sha1 = "05fa79b807e11f1a123ab636abcbc6cf4b6c51c4"
+git-tree-sha1 = "ae67ab0505b9453655f7d5ea65183a1cd1b3cfa0"
 uuid = "b8865327-cd53-5732-bb35-84acbb429228"
-version = "2.12.3"
+version = "2.12.4"
 
 [[deps.Unitful]]
 deps = ["ConstructionBase", "Dates", "LinearAlgebra", "Random"]
@@ -937,28 +955,27 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╔═╡ Cell order:
 # ╟─ba85bf56-5401-4430-a0e2-eef7e06347a5
 # ╠═fbce1e27-45db-465d-83f0-a0a7935abf14
-# ╠═2f700532-bc7b-4408-8268-f9f632a75451
-# ╠═1f4e28e0-c2f0-4c06-a9f8-d0d71999114a
+# ╟─1f4e28e0-c2f0-4c06-a9f8-d0d71999114a
 # ╠═001d049c-efd2-11ec-0083-cff70f84b072
 # ╠═c7dbfd5b-a97e-4628-a2f8-8651f12c60f6
-# ╠═a3a5b911-1097-454a-b0ec-463874be92b4
 # ╟─50569a1e-5deb-48b6-be72-5be41dcb5b43
 # ╠═280c7ef0-61d5-4d28-87b2-d26855c76b6b
 # ╠═b8fe0af1-29b7-419a-ad3e-7b120eb5cbe1
 # ╠═35bed858-6b76-4dbb-b49a-505f36b13434
 # ╠═741777ff-2d40-4393-a0d4-669f3460cc64
-# ╠═1f59e516-4dc1-450e-87a4-9ce6ac64029d
+# ╟─1f59e516-4dc1-450e-87a4-9ce6ac64029d
 # ╠═dde19062-8a22-4caa-ae68-23895628dc3e
+# ╟─19e3a49e-ccb3-45a6-9bbd-7ac1bf3b93c9
 # ╠═18e32b95-2d13-4502-8500-48b0c380291c
-# ╠═10c9e253-2913-4f85-9989-8b3fffba423e
+# ╟─10c9e253-2913-4f85-9989-8b3fffba423e
 # ╠═ac656984-3bdd-4a33-90be-45042e0080a5
 # ╠═1a903be4-57fb-466c-96e3-f2ad36acc77c
+# ╟─295f57d0-59ae-4f50-9b5d-fce8df76be5c
 # ╠═324be56b-512b-4664-9f5b-943b6d9aeade
 # ╟─5c13430a-96c4-447f-89a7-1fe99078feee
 # ╠═be7bbb76-fc0f-40b5-982b-7e46126f9c28
 # ╟─b5013701-848a-4920-b4f5-360815a9f2e2
-# ╠═1d59569f-c56b-45d0-ae57-ead57f68ed7b
-# ╠═7dd4015f-6b58-4cf2-af3f-30bf3d43d468
+# ╟─7dd4015f-6b58-4cf2-af3f-30bf3d43d468
 # ╠═2e7a438e-435f-4dc1-86c2-947ea8ceb8d4
 # ╠═9e824c6d-a303-427f-973c-bc1b9658709d
 # ╠═973a5a58-9b42-4532-be80-21f18fb6791e
