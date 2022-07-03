@@ -19,7 +19,7 @@ A simple example of how one could define a nested projection system. Includes th
 - Outer + Inner loop policy projections with padded cashflows determining reserves and capital
 - Outer + Inner loop with a stochastic interest rate for the reserves
 
-In this notebook, we define a term life policy, implement the mechanics for "outer" projected values, as well as "inner" projections so that we can determine a projection-based reserve. This is done with both a determinstic and stochastic "inner" loop.
+In this notebook, we define a term life policy, implement the mechanics for "outer" projected values, as well as "inner" projections so that we can determine a projection-based reserve. This is done with both a deterministic and stochastic "inner" loop.
 """
 
 # ╔═╡ 1f4e28e0-c2f0-4c06-a9f8-d0d71999114a
