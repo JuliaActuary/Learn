@@ -78,30 +78,47 @@ assumptions = (
 # ╔═╡ 19e3a49e-ccb3-45a6-9bbd-7ac1bf3b93c9
 md"### Innerloop assumption
 
-In this example, we're assuming just a PADed mortality rate for the innerloop. We take the assumption set and use `Setfield.@set` to return a new immutable named tuple with just that value modified:
+In this example, we're assuming just a PADed mortality rate for the inner loop. We take the assumption set and use `Setfield.@set` to return a new immutable named tuple with just that value modified:
 "
 
 # ╔═╡ 18e32b95-2d13-4502-8500-48b0c380291c
 innerloop_assumption(outer_assump) = @set outer_assump.q *= 1.2
 
 # ╔═╡ 10c9e253-2913-4f85-9989-8b3fffba423e
-md"## Projection Logic"
+md"""## Projection Logic
+
+The architecture takes inspiration from web server architecture where data is passed through multiple processing steps before being returned. The logic is contained within a function called `project`, which:
+
+1. Project a single timestep and create a tuple of values: `(policy, assumptions, result)`
+2. Apply the function `additional_processing` which takes as an argument `(policy, assumptions, result)`.
+3. `additional_processing` can then define an "inner" loop, which could just be to apply the `project` with a modified set of assumptions. In this way, one or more "inner" loops can be defined.
+4. The final `additional_processing` function should return whatever you want to return as a result.
+
+By default, the `additional_processing` will simply return the last argument, `result` and therefore will not have any inner loops.
+
+"""
 
 # ╔═╡ ac656984-3bdd-4a33-90be-45042e0080a5
 """
 	project(policy,assumptions;start_time=1,additional_processing=res)
 
-The kwarg `additional_processing` defines an intermediate processing step where one can take the current model state and perform additional work, including nested projections. If left out of the arguments, the default for `additional_processing` is `res`, where `res` is (pol,assumpitons, result)->result (ie will just return the model point's results with no additional work being done).
+The kwarg `additional_processing` defines an intermediate processing step where one can take the current model state and perform additional work, including nested projections. If left out of the arguments, the default for `additional_processing` is `res`, where `res` is (pol,assumptions, result)->result (ie will just return the model point's results with no additional work being done).
 
 """
 function project(
 		pol::Term,
 		assumptions;
 		start_time=1,
-		additional_processing=(pol,assumpitons, result)->result
+		additional_processing=(pol,assumptions, result)->result
 	)
+
+	# alias the assumptions to A for brevity
 	A = assumptions
+
+	# iterate over the policy from the start time to the end of the policy's term
 	map(start_time:pol.term) do t
+		
+		# calculate components of the projection
 		timestep = t
 		premium = premiums(pol,A,t)
 		q = qx(pol,A,t)
@@ -133,6 +150,9 @@ function run_inner(policy,assumptions,result)
 	A = innerloop_assumption(assumptions)
 	p = project(policy,A;start_time=result.timestep+1)
 
+	# calculate the reserves as the present value of the 
+	# cashflows within the inner loop projections
+	# discounted at the reserve interest rate
 	reserves = -pv(A.int_reserve,[modelpoint.net_cf for modelpoint in p])
 	capital = reserves * A.capital_factor
 	additional_results = (; reserves, capital)
@@ -967,7 +987,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═dde19062-8a22-4caa-ae68-23895628dc3e
 # ╟─19e3a49e-ccb3-45a6-9bbd-7ac1bf3b93c9
 # ╠═18e32b95-2d13-4502-8500-48b0c380291c
-# ╟─10c9e253-2913-4f85-9989-8b3fffba423e
+# ╠═10c9e253-2913-4f85-9989-8b3fffba423e
 # ╠═ac656984-3bdd-4a33-90be-45042e0080a5
 # ╠═1a903be4-57fb-466c-96e3-f2ad36acc77c
 # ╟─295f57d0-59ae-4f50-9b5d-fce8df76be5c
