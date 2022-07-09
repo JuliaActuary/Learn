@@ -66,7 +66,7 @@ $(Resource("https://www.sfbok.se/sites/default/files/styles/large/sfbok/sfbokbil
 
 $(Resource("https://prodimage.images-bn.com/pimages/9780674258662_p0_v1_s1200x630.jpg"))
 
-$(Resource("/Desktop/Digital vs Traditional.png"))
+$(Resource("https://raw.githubusercontent.com/JuliaActuary/Learn/master/intro-video/assets/Digital-vs-Traditional.png"))
 """
 
 # ╔═╡ 47c7ecd8-1610-4ce8-bff1-814a48336368
@@ -82,7 +82,7 @@ md"# Why Julia
 md"""
 ## Who uses Julia today?
 
-$(Resource("/Desktop/Julia Users.png"))
+$(Resource("https://raw.githubusercontent.com/JuliaActuary/Learn/master/intro-video/assets/Julia-Users.png"))
 """
 
 # ╔═╡ a1ea0a4f-8074-4a3f-a88b-eb9f4e8ece3d
@@ -679,15 +679,10 @@ end
 # ╔═╡ 3b3c4951-7c85-41b1-9f5b-1a23f4b4c465
 md""" # Endnotes
 
-## Colophon
-
-## References
-
-[^1]: [Co-evolution of Information Processing Technology and Use: Interaction Between the Life Insurance and Tabulating Industries](https://dspace.mit.edu/bitstream/handle/1721.1/2472/swp-3575-28521189.pdf?sequence=1)
 """
 
 # ╔═╡ f1675cb1-ece0-4a5f-a0eb-7fd16010461c
-md"## Packages"
+md"## Colophon"
 
 # ╔═╡ 1e3e432b-3027-4dfe-992c-14189f675181
 TableOfContents()
@@ -1834,7 +1829,7 @@ version = "17.4.0+0"
 # ╟─142954b2-9615-4527-9a1a-d687583ff38e
 # ╟─0c351b21-f3ee-43ee-8cb0-fb0faf003c84
 # ╟─47c7ecd8-1610-4ce8-bff1-814a48336368
-# ╠═7b86f12b-de88-40e0-bee3-1d9ba188fd40
+# ╟─7b86f12b-de88-40e0-bee3-1d9ba188fd40
 # ╟─a1ea0a4f-8074-4a3f-a88b-eb9f4e8ece3d
 # ╟─baee42c3-b745-4657-8904-56e3f69c66ca
 # ╠═4b92b938-b5e1-4389-9a94-f8ded9d8c4d9
