@@ -1,5 +1,5 @@
 lang,library,function_name,median,mean
-Python,numpy_financial,irr,,918376814
-Python,better,irr_binary_search,,3698785
-Python,better,irr_newton,, 557129
-Julia,ActuaryUtilities,irr,69625,68792
+Python,numpy_financial,irr,,5339167688
+Python,better,irr_binary_search,,6167798
+Python,better,irr_newton,, 945813
+Julia,ActuaryUtilities,irr,16000,16042

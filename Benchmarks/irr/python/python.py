@@ -1,6 +1,6 @@
-
-# Numpy Vecotrized
-# Via Houstonwp
+# better code copied from:
+# https://github.com/better/irr/blob/d521607024226c215e569a63346e2d6ca0ff60da/irr/__init__.py
+# (couldn't get it to install via package manager)
 import timeit
 import numpy
 
