@@ -92,7 +92,12 @@ function exp_df(raw_df)
 		continued
 	)
 	df = flatten(df,:exposure)
-	df.exposure_fraction = map(e -> yearfrac(e.from,e.to,DayCounts.Actual365Fixed()),df.exposure)
+
+	# Here, you can customize the interpretation of a calendar year.
+	# See the DayCounts.jl pacakge for options
+	df.exposure_fraction = map(df.exposure) do e 
+		yearfrac(e.from,e.to,DayCounts.Actual365Fixed())
+	end
 
 	# create a column with a surrender status
 	df.surrender = map(eachrow(df)) do r
@@ -106,7 +111,7 @@ function exp_df(raw_df)
 	expectation = vcat(range(0.005,0.03,10),  [0.2, 0.15],fill(0.05,10))
 	df.expected = map(yr->expectation[yr],df.pol_year)
 
-	# 
+	# return the dataframe
 	df
 	
 end
