@@ -130,7 +130,7 @@ end
 md"""
 ### Book and Market Yield
 
-In the above example, the bond was priced at a market=book yield of $disc_rate.
+In the above example, the bond was priced at a market=book yield of $yield_to_maturity_rate.
 
 However, what happens to the yield if the value were to change from when you purchased the bond at $(round(original_price;digits=2))?
 
