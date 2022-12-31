@@ -7,6 +7,9 @@ using InteractiveUtils
 # ╔═╡ 0d04723f-2b88-4467-9b7b-fbbf1a29f88c
 using Distributions
 
+# ╔═╡ 96c6047b-4cf1-4be0-a803-2bf57368cf6c
+using Random
+
 # ╔═╡ 5cf21c5b-44e8-4319-9a0c-5770d823b5f7
 md" Initial attempt to replicate AAA equtity generator. 
 
@@ -42,7 +45,7 @@ function v(v_prior,params,Zₜ)
 	v_p = log(σ_p)
 	v⃰ = log(σ⃰)
 
-	ṽ = min(v_p, (1-ϕ)*v_prior+ϕ * log(τ) ) + σ_v * Zₜ[2]
+	ṽ = min(v_p, (1-ϕ)*v_prior + ϕ*log(τ) ) + σ_v * Zₜ[2]
 	
 	v = max(v_m, min(v⃰,ṽ))
 
@@ -52,15 +55,18 @@ end
 # ╔═╡ b089355b-852b-4649-bb0b-b3ac2454f00e
 function scenario(params)
 	(;σ_v,σ_0, ρ,A,B,C,months) = params
+
 	Z = MvNormal(
-		[0.,0.], #return and volatility
-		[1. ρ; ρ σ_v]
+		[0.,0.], #means for return and volatility
+		[1. ρ; ρ 1.] # covariance matrix
+		# full covariance matrix in AAA Excel workook on Parameters tab
 	)
-	draw_Z() = rand(Z)
+	Zₜ = rand(Z)
 
 	v_t = log(σ_0)
+	
 	map(1:months) do t
-		Zₜ = draw_Z()
+		Zₜ = rand!(Z,Zₜ)
 
 		v_t = v(v_t,params,Zₜ)
 
@@ -99,6 +105,7 @@ end
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [compat]
 Distributions = "~0.25.79"
@@ -110,7 +117,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.8.3"
 manifest_format = "2.0"
-project_hash = "5a1d71d913998d790bc5c3cfc03d2d4b0d590e8d"
+project_hash = "6a65f13ff8d387fdd4ccdaa56a039804e8038417"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
@@ -465,6 +472,7 @@ version = "17.4.0+0"
 # ╔═╡ Cell order:
 # ╟─5cf21c5b-44e8-4319-9a0c-5770d823b5f7
 # ╠═0d04723f-2b88-4467-9b7b-fbbf1a29f88c
+# ╠═96c6047b-4cf1-4be0-a803-2bf57368cf6c
 # ╠═fb638ee3-cddb-47d7-b573-1db20ccd1fcf
 # ╠═a2d95991-9f15-46b2-9d01-84bc71551bb9
 # ╠═b089355b-852b-4649-bb0b-b3ac2454f00e
