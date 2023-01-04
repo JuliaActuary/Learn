@@ -10,6 +10,9 @@ using Distributions
 # ╔═╡ 96c6047b-4cf1-4be0-a803-2bf57368cf6c
 using Random
 
+# ╔═╡ 482b68b4-f3ab-4ccb-a3a8-c789bbf14194
+using StatsBase
+
 # ╔═╡ 5cf21c5b-44e8-4319-9a0c-5770d823b5f7
 md" Initial attempt to replicate AAA equtity generator. 
 
@@ -74,7 +77,7 @@ function scenario(params)
 
 		μ_t = A + B * σ_t + C * (σ_t)^2
 
-		log_return = μ_t / 12 + σ_t / 12 * Zₜ[1]
+		log_return = μ_t / 12 + σ_t / sqrt(12) * Zₜ[1]
 	end
 		
 		
@@ -106,9 +109,11 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
 [compat]
 Distributions = "~0.25.79"
+StatsBase = "~0.33.21"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -117,7 +122,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.8.3"
 manifest_format = "2.0"
-project_hash = "6a65f13ff8d387fdd4ccdaa56a039804e8038417"
+project_hash = "94454ce253e789671e3d75829a5be1163393c936"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
@@ -473,6 +478,7 @@ version = "17.4.0+0"
 # ╟─5cf21c5b-44e8-4319-9a0c-5770d823b5f7
 # ╠═0d04723f-2b88-4467-9b7b-fbbf1a29f88c
 # ╠═96c6047b-4cf1-4be0-a803-2bf57368cf6c
+# ╠═482b68b4-f3ab-4ccb-a3a8-c789bbf14194
 # ╠═fb638ee3-cddb-47d7-b573-1db20ccd1fcf
 # ╠═a2d95991-9f15-46b2-9d01-84bc71551bb9
 # ╠═b089355b-852b-4649-bb0b-b3ac2454f00e
