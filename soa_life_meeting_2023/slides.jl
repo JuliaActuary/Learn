@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.25
+# v0.19.27
 
 using Markdown
 using InteractiveUtils
@@ -22,18 +22,22 @@ using ProgressLogging
 
 # ╔═╡ 009b8e21-a7a2-41d0-af6c-5be89ea819f7
 # ╠═╡ show_logs = false
-begin 
-	using CondaPkg; CondaPkg.add("seaborn");
-	using PythonCall
-	using DataFrames
+begin
+    using CondaPkg
+    CondaPkg.add("seaborn")
+    using PythonCall
+    using DataFrames
 end
+
+# ╔═╡ 30427a18-e235-41e4-8524-3148a659ddb8
+using LinearAlgebra
 
 # ╔═╡ 1c0ccd93-59b8-46e2-bf3a-45ae79b35af0
 using MortalityTables, Yields, LifeContingencies, ActuaryUtilities
 
 # ╔═╡ 8320edcc-ef78-11ec-0445-b100a477c027
-begin 
-	using PlutoUI
+begin
+    using PlutoUI
 end
 
 # ╔═╡ 458f2690-e3fb-40a8-a657-e3a0666af69c
@@ -41,7 +45,7 @@ html"<button onclick='present()'>Press this to switch to presentation mode</butt
 
 # ╔═╡ 3c2da572-90d0-4206-9586-18f2cea6b6ca
 md"# Introduction to Julia
-Download this notebook: [TBD](TBD)
+Download this notebook: [https://github.com/JuliaActuary/Learn/blob/master/soa_life_meeting_2023/slides.jl](https://github.com/JuliaActuary/Learn/blob/master/soa_life_meeting_2023/slides.jl)
 
 ## Recorded for: SOA Life Meeting 2023
 ### Presented by Yun-Tien Lee and Alec Loudenback
@@ -77,9 +81,9 @@ Presentations are intended for educational purposes only and do not replace inde
 md"""
 # Outline for today
 
-1. Why Julia? An Introduction to the Language
-2. Three actuarial case studies
-3. An Actuarial-oriented Ecosystem overview
+1. Why Julia? An Introduction to the Language *(20 minutes)*
+2. Three actuarial case studies *(20 minutes)*
+3. An Actuarial-oriented Ecosystem overview *(15 minutes)*
 
 """
 
@@ -108,7 +112,7 @@ What does Julia look like?
 """
 
 # ╔═╡ 3fcc0272-814a-423b-aad0-63030a32b8f5
-a = [1,2,3]
+a = [1, 2, 3]
 
 # ╔═╡ 3d8916c4-2315-4420-a19b-61ac58ea9d60
 f(x) = x^2
@@ -124,15 +128,15 @@ x[1:5]
 
 # ╔═╡ bb75f7b0-5cb2-425d-8c3c-13f49862d44a
 let
-	1 + 1   						# Addition
-	arr = [1,2,3] 					# array of data
-	[x^2 for x in arr] 				# array comprehension
-	x = 1 							# variable assignment
-	x, y = 1, 2 					# multiple variable assignment
-	arr[1:2] 						# slicing, note 1-indexed
-	Dict("a" => 123, "b" => 456) 	# dictionaries
-	f(x) = x^2 						# functions
-	"this is a string" 				# strings
+    1 + 1                        # Addition
+    arr = [1, 2, 3] 			 # array of data
+    [x^2 for x in arr] 			 # array comprehension
+    x = 1 						 # variable assignment
+    x, y = 1, 2 				 # multiple variable assignment
+    arr[1:2] 					 # slicing, note 1-indexed
+    Dict("a" => 123, "b" => 456) # dictionaries
+    f(x) = x^2 					 # functions
+    "this is a string" 			 # strings
 end;
 
 # ╔═╡ b72b91c5-c6df-4eb5-a5e0-63ef8f20d34c
@@ -153,7 +157,7 @@ x = reshape(0:14, 3,5)
 """
 
 # ╔═╡ f23b4b4e-baf5-4a7d-9a33-14050f1993e6
-reshape(0:14,3,5) # can infer type from 0 or 0.
+reshape(0:14, 3, 5) # can infer type from 0 or 0.
 
 # ╔═╡ 5c811d55-53df-4a9c-b75f-4656168b70e2
 md"""
@@ -270,19 +274,15 @@ function mysum(x, y)                                # same as x.sum(y) in OO-syn
         return add64_using_the_fpu(x64, y64)
     end
 end
-     
-
 ```
+*Example taken from [Advanced Scientific Computing course](https://github.com/timholy/AdvancedScientificComputing)).*
 
 In Julia, the above is accomplished by the compiler at compile-time while in the above example, the logic has to be computed at run-time. Performance is easy to show in simple examples, but for the actuary the greatest benefit may be in design and ergonomics. 
-
-
-
 """
 
 # ╔═╡ 44ec070b-4732-4b7b-9f75-51dd06032a4b
 md"""
-### Multiple dispatch & Extensibility examples:
+#### Multiple dispatch & Extensibility examples:
 
 - You define a type of data that has a default plot when visualized - this doesn't require adding very niche methods to your data's class, nor do you have to modify plotting library.
 - You want to fit a yield curve to observed asset quotes. The logic differs depending on the *combination* of model you want to fit (spline, parametric), asset quoted, and method (Bootstrap, least squares). In an object oriented world, where do you put the logic for fitting the yield curve: the assets, the model, or the fitting algorithm?
@@ -309,6 +309,7 @@ $(Resource("https://d33wubrfki0l68.cloudfront.net/66d90b5ada11fc740cec59cc8ca00f
 
 # ╔═╡ 48ac1891-9047-47bf-9536-ec841c746907
 md"""
+## A Guided Tour of Language Features
 ### Unicode 
 
 **Example**: Black scholes $$d_1$$ component:
@@ -343,13 +344,13 @@ ispositive(-1)
 md"We didn't define how this would work on arrays so this will error:"
 
 # ╔═╡ e26e3daf-ee55-434d-9d46-c083537df72a
-ispositive([1,2,3])
+ispositive([1, 2, 3])
 
 # ╔═╡ 47556a7c-230a-4211-af06-f6fb61fbd7c1
 md"But we can broadcast (using the dot, `.`) across arrays:"
 
 # ╔═╡ ae5ed9ec-c4a3-4765-a3e2-35e9e2a285f1
-ispositive.([1,2,3,-2])
+ispositive.([1, 2, 3, -2])
 
 # ╔═╡ 8855b283-153e-4b9c-9758-97e0dea133a4
 md"""
@@ -370,10 +371,10 @@ Has several features note found in Jupyter notebooks:
 """
 
 # ╔═╡ dcaec0a0-ba12-4021-8169-9a4043e38758
-b = 20
+@bind b Slider(1:20, show_value=true)
 
 # ╔═╡ 7c668208-8fe7-4f9d-b23c-4725a244d176
-b ^ 2
+b^2
 
 # ╔═╡ 6e4662da-72a5-42a5-80c5-a5846513a1ff
 md"""
@@ -398,17 +399,15 @@ Kind of like "magics" in Jupyter/Python, but even more powerful and language-wid
 # ╔═╡ 519a702a-0dfd-4ecd-a66e-58a5bac0d97b
 @benchmark sum(x^2 for x in rand(1000))
 
-# ╔═╡ adcc763b-b35d-4e3d-af26-dcbe3e648830
-md"#### Introspection"
-
-# ╔═╡ 6124bd7b-b49e-42c8-9957-5425d78420a8
-@code_warntype sum(0:1000000)
-# @code_llvm sum(0:1000000)
-# @code_native sum(0:1000000)
+# ╔═╡ 5c7f46f6-3a9d-430e-85ce-c692b6903845
+# add progress bar to a for loop
+@progress for i in 1:10
+    sleep(0.1)
+end
 
 # ╔═╡ c414d316-454e-4a0c-aeac-54826cc6b203
 md"""
-### Other cool macros
+#### Other cool macros
 
 - `@edit` will open the function to edit in your default editor
 - `@which` will indicate where the function you are using is defined
@@ -418,15 +417,14 @@ Performance optimzers (use with special consideration):
 - `@inbounds` will disable index checking on arrays
 - `@simd` wiil parrallelize within a CPU core (single instruction, multiple dispatch)
 - `@threads` will split computation across CPU threads
-- `@fastmasth` will allow compiler to re-arange math operations for performance, but at the cost of accuracy!
+- `@fastmath` will allow compiler to re-arange math operations for performance, but at the cost of accuracy!
+
+Digging deeper:
+
+- `@code_warntype` will tell you if your code is not type stable
+- `@code_llvm` and `@code_native` to see the combiled LLVM and assembly code 
 
 """
-
-# ╔═╡ 5c7f46f6-3a9d-430e-85ce-c692b6903845
-# add progress bar to a for loop
-@progress for i in 1:10
-		sleep(0.1)
-end
 
 # ╔═╡ a1ea0a4f-8074-4a3f-a88b-eb9f4e8ece3d
 md"""
@@ -503,24 +501,6 @@ Julia has an Artifacts system, which allows it to bundle platform-specific depen
 
 **Example:** a copy of the entire [Mort.SOA.org](https://mort.soa.org/) table set is included as a <10MB file with [MortalityTables.jl](https://github.com/JuliaActuary/MortalityTables.jl)
 
-
-### Ecosystem
-
-
-There are ~8000 registered packages as of July 2022. 
-
-Julia has very robust, and in many cases industry leading, packages in:
-
-- DataFrames and Datascience
-- Statistics 
-- Optimization
-- Computational interaction (like Pluto!)
-- Automatic differentiation
-- Machine learning
-- Differential Equations
-- ... many more...
-
-
 """
 
 # ╔═╡ baee42c3-b745-4657-8904-56e3f69c66ca
@@ -548,12 +528,12 @@ Sum numbers `a` and `b`:
 
 ``(a + b) = c ``
 """
-function mysum(a,b)
-   return a + b
+function mysum(a, b)
+    return a + b
 end
 
 # ╔═╡ 9a237e79-80ec-4dce-a3f4-4856ae8dcd5b
-mysum(1,2)
+mysum(1, 2)
 
 # ╔═╡ 93647fd4-e466-48d1-b2e4-eb47d3e0f813
 md""" 
@@ -588,44 +568,1145 @@ Use existing Python and R code/libraries within Julia!
 
 # ╔═╡ 1d6c8644-fe0e-48c7-8bf0-e69ce366922a
 begin
-	sns = pyimport("seaborn")
-	sns.pairplot(pytable(DataFrame(w=rand(50),x=rand(50),y=rand(50),z=rand(50))),hue="z")
+    sns = pyimport("seaborn")
+    sns.pairplot(pytable(DataFrame(w=rand(50), x=rand(50), y=rand(50), z=rand(50))), hue="z")
 end
-	
 
-# ╔═╡ 19218504-c053-41bf-a089-4af8d1d652a8
+
+# ╔═╡ 00ec6209-f11b-468b-aee5-70689d82c1ea
+md"""
+### Excel Integration
+
+- ClipData.jl lets you copy and paste data to and from Excel
+$(Resource("https://user-images.githubusercontent.com/711879/116339390-f44a9080-a7a2-11eb-9e3b-9d4716747bd1.mp4"))
+
+- JuliaExcel lets you interop Excel and Julia
+
+$(Resource("https://raw.githubusercontent.com/PGS62/JuliaExcel.jl/master/images/Demo4-take3.gif"))
+
+"""
+
+# ╔═╡ ab4a3d0c-e83a-4d24-a3a7-7a5b8400bc20
+md" # Insurance Analytics Oriented Case Studies"
+
+# ╔═╡ db87f649-4680-4e5a-9ec0-1e2d998f8205
 md"""
 
-## Python Code
+An excerpt from one of our previous research papers shows several important and interesting applications in various phases during the insurance sales process. Generally the process consists of three phases - before, during and after sales.
 
-```csharp
-public int popCount(int[] x, int[] y )
+The following shows sample code snippets and benchmarking results in various languages.
+
+$(Resource("https://raw.githubusercontent.com/leeyuntien-milli/LifeMeeting/main/Potential_Benefits.png"))
+"""
+
+# ╔═╡ 1465fdd0-f13b-4eee-a7d5-3fde591dea55
+md"""
+## Use case 1 - similarity calculation
+
+In applications like customer or risk segmentation or fraud detection, one would like to get to know how similar two or more customers, risks or claims look like. Usually the calculation entails a measurement of degree of overlap. Depending on data types, the implementation of one-hot encoded categorical fields may be different from numerical fields.
+
+"""
+
+# ╔═╡ 0810b84a-3129-4809-b71b-9155354985d0
+md"""
+
+#### Julia Code
+
+```Julia
+using LinearAlgebra
+
+n = 100_000_000
+x = BitVector(rand(Bool, n))
+y = BitVector(rand(Bool, n))
+r = rand(n)
+s = rand(n)
+
+function popcnt(x, y) # for one-hot encoded categorical fields
+    return LinearAlgebra.dot(x, y)
+end
+
+function sim(r, s) # for numerical fields
+    return LinearAlgebra.dot(r, s)
+end
+```
+
+"""
+
+# ╔═╡ 43ac6ec6-7a55-4cba-a4db-f2f9758ac7ac
+md"""
+
+#### Python Code
+
+```Python
+import numpy, util, bitarray
+
+n = 100_000_000
+x = util.urandom(n)
+y = util.urandom(n)
+r = numpy.random.rand(n)
+s = numpy.random.rand(n)
+
+def popcnt(x, y): # for one-hot encoded categorical fields
+    return bitarray.count(x & y)
+
+def sim(r, s): # for numerical fields
+    return numpy.dot(r, s)
+```
+
+"""
+
+# ╔═╡ 8b7ceb12-548c-49e0-af3a-6bb101a581e6
+md"""
+
+#### Rust Code
+
+```Rust
+use rayon::prelude::*;
+
+pub fn and_count_par(a: &[i32], b: &[i32]) -> u32 {
+    let vec: Vec<i32> = a.par_iter().zip(b.par_iter()).map(|(&a, &b)| a & b).collect();
+    let count = vec.par_iter().map(|&byte| byte.count_ones()).sum();
+    return count;
+}
+
+pub fn main() {
+    let bits = 100_000_000;
+    let x = rand_vec(bits);
+    let y = rand_vec(bits);
+	and_count_par(&x,&y);
+}
+```
+
+"""
+
+# ╔═╡ 75338a1c-9684-4bf7-9952-cdeaf315e15b
+md"""
+
+#### C++ Code
+
+```Cpp
+#include <iostream>
+#include <functional>
+#include <boost/chrono.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/dynamic_bitset.hpp>
+#include <boost/iterator/function_input_iterator.hpp>
+#include <boost/iterator/function_output_iterator.hpp>
+
+#include "profile.hpp"
+#include "profile_config.hpp"
+#include "collector/json.hpp"
+
+using namespace boost;
+
+const size_t BIT_CAPACITY = 100000000;
+
+typedef random::mt19937 prng_type;
+typedef prng_type::result_type block_type;
+typedef dynamic_bitset<block_type> bitvector_type;
+typedef bitvector_type::size_type size_type;
+
+class specialization_tag
+{
+};
+
+template <typename SPECIALIZATION>
+size_type count_bits(bitvector_type const& bitvector, SPECIALIZATION const& specialization)
+{
+	return bitvector.count();
+}
+
+#if defined(USE_KERNIGHAN_BIT_COUNT_ALGORITHM)
+
+class bit_counter
+{
+public:
+	bit_counter(size_type* counter) :
+		counter_(counter)
 	{
-	int total = 0;
-	Partitioner<Tuple<int, int>> partitioner =
-	
-	Partitioner.Create(0, n);
-	
-	Parallel.ForEach(partitioner, range =>
-	{
-	int localCount = 0;
-	int b = range.Item1;
-	int e = range.Item2;
-	for (int i = b; i < e; i++)
-	{
-	localCount += int.PopCount(x[i] & y[i]);
 	}
-	Interlocked.Add(ref total, localCount);
-	});
-	return total;
+
+	bit_counter(bit_counter const& other) :
+		counter_(other.counter_)
+	{
 	}
+
+	bit_counter& operator=(bit_counter const& other)
+	{
+		counter_ = other.counter_;
+		return *this;
+	}
+
+	void operator()(block_type integer)
+	{
+		size_type bits = 0;
+		while (integer)
+		{
+			++bits;
+			integer &= integer - 1;
+		}
+		*counter_ += bits;
+	}
+
+private:
+	size_type* counter_;
+};
+
+template <>
+size_type count_bits<specialization_tag>(bitvector_type const& bitvector, specialization_tag const& specialization)
+{
+	size_type count = 0;
+	bit_counter counter(&count);
+	to_block_range(bitvector, make_function_output_iterator(counter));
+	return count;
+}
+
+#endif /* USE_KERNIGHAN_BIT_COUNT_ALGORITHM */
+
+class profiler_subject
+{
+protected:
+	profiler_subject() :
+		x_bitvector_(BIT_CAPACITY),
+		y_bitvector_(BIT_CAPACITY),
+		bitcount_(0),
+		prng_(static_cast<block_type>(std::time(0)))
+	{
+	}
+
+protected:
+	void setup()
+	{
+	}
+
+	void begin_sample(int trial)
+	{
+		size_type zero(0);
+
+		std::cerr << "[PROGRESS] starting trial #" << trial << "..." << std::endl;
+
+		from_block_range(make_function_input_iterator(prng_, zero), make_function_input_iterator(prng_, x_bitvector_.num_blocks()), x_bitvector_);
+		from_block_range(make_function_input_iterator(prng_, zero), make_function_input_iterator(prng_, y_bitvector_.num_blocks()), y_bitvector_);
+	}
+
+	void sample(int trial)
+	{
+		dynamic_bitset<block_type> intersection(x_bitvector_);
+		intersection &= y_bitvector_;
+		bitcount_ = count_bits(intersection, specialization_tag());
+	}
+
+	void end_sample(int trial)
+	{
+		std::cerr << "[PROGRESS] bit count for trial #" << trial << " of " << BIT_CAPACITY << ": " << bitcount_ << std::endl;
+	}
+
+	void teardown()
+	{
+	}
+
+private:
+	bitvector_type x_bitvector_;
+	bitvector_type y_bitvector_;
+	size_type bitcount_;
+	prng_type prng_;
+};
+
+int main(int argc, char* argv[])
+{
+	int result = 0;
+	json_output collector;
+	argv_collection arguments(argc - 1, argv + 1);
+	
+	try
+	{
+		profile_config<argv_collection::const_iterator> config(arguments.begin(), arguments.end());
+		profiler<profiler_subject, json_output> metrics(config.get_trial_count(), collector);
+		metrics.run();
+	}
+	catch (std::exception const& e)
+	{
+		std::cerr << "[ERROR] " << e.what() << std::endl;
+		result = 1;
+	}
+	
+	return result;
+}
+```
+
+"""
+
+# ╔═╡ 675e95d9-2d12-4324-9418-a12de6e8c082
+md"""
+
+Benchmarking results
+
+$(Resource("https://raw.githubusercontent.com/leeyuntien-milli/LifeMeeting/main/similarity1.png"))
+
+$(Resource("https://raw.githubusercontent.com/leeyuntien-milli/LifeMeeting/main/similarity2.png"))
+
+"""
+
+# ╔═╡ cceb9793-c1fc-437d-8b76-e613da8212b6
+md"""
+## Use case 2 - simulation
+
+In applications like insurance buying or agency force behavior analyses, risk analyses or reserving on variable annuities or interest-sensitive products, one would normally do simulation to find out how distributions of variables in question look like. Summary statistics like mean or value-at-risk can be derived to help characterize the distributions.
+
+"""
+
+# ╔═╡ b4fa8e12-1a5a-4b57-970d-b8c877233c25
+md"""
+
+#### Julia Code
+
+```Julia
+using Distribution, Distributed, DistributedArrays
+
+τ = 120 * 12 # policy duration
+n = 10_000 # number of policies
+m = 1_000 # number of scenarios # number of scenarios
+MORT = fill(0.001 / 12, τ) # Mortality for simplicity
+survival = cumprod(1.0 .- MORT) # mortality decrement only
+POL = (fill(0.02 / 12, n), fill(1000, n)) # charges, benefits
+YIELD = 1.0 .+ rand(Uniform(-0.02, 0.08) / 12, m, τ)
+res = zeros((m ÷ nworkers() + 1) * nworkers())
+res = distribute(res; dist = nworkers())
+
+@everywhere function simt(survival, YIELD, POL, MORT, n, τ)
+    gc = zeros(n) # policy charge
+    av = ones(n) # account value
+    r = zeros(n) # accumulated deficiency
+    b = zeros(n) # benefit
+    @inbounds for j = 1:τ
+        gc .= av .* POL[1]
+        av .-= gc
+        av .*= YIELD
+        b .= (POL[2] .- av) .* (survival[j] * MORT[j])
+        r .= max.((b .- gc) ./ (YIELD ^ j), r)
+    end
+    return sum(r)
+end
+
+function sima(res, survival, YIELD, POL, MORT, m, n, τ)
+    @sync @distributed for k = 1:m
+        res_local = localpart(res)
+        res_local[(k - 1) % (m ÷ nworkers() + 1) + 1] =
+        simt(survival, YIELD[k, :], POL, MORT, n, τ)
+    end
+end
+```
+
+"""
+
+# ╔═╡ 00570477-26d7-4030-9ae9-3baaf0cef8a9
+md"""
+
+#### Python Code
+
+```Python
+t = 120 * 12 # policy duration
+n = 10_000 # number of policies
+m = 1_000 # number of scenarios
+MORT = np.full(t, 0.001 / 12)
+survival = np.cumprod(1.0 - MORT)
+POL = (np.full(n, 0.02 / 12), np.full(n, 1000))
+YIELD = 1.0 + np.array([np.random.uniform(-0.02, 0.08, (m, t))])
+res = np.zeros(m) # reserve
+
+def sima(gc, b, res, survival, YIELD, POL, MORT, m, n, t):
+  for k in range(m): # number of scenarios
+      gc = np.zeros(n) # policy charge
+      b = np.zeros(n) # benefit
+      r = np.zeros(n) # accumulated deficiency
+      av = np.ones(n) # account value
+      for j in range(t): # timepoints
+          gc = av * POL[0]
+          av -= gc
+          av *= YIELD[k, j]
+          b = (POL[1] - av) * (survival[j] * MORT[j])
+          r = np.maximum((b - gc) / (YIELD[k, j] ** (j + 1)), r)
+      res[k] = sum(r)
+```
+
+"""
+
+# ╔═╡ 8da63366-88ea-48c1-a696-0a3442793232
+md"""
+
+#### Rust Code
+
+```Rust
+use rayon::prelude::*;
+use serde::Serialize;
+use std::env;
+use std::{time::Duration};
+use std::fs::File;
+use std::io::prelude::*;
+use serde_json::{self, to_string_pretty};
+
+#[derive(Serialize)]
+struct Stats { pub min: Duration, pub max: Duration, pub avg: Duration }
+
+#[allow(non_snake_case)]
+pub fn sima(res:&mut [f64], survival:&[f64], YIELD:&[f64], POL:&(Vec<f64>,Vec<f64>), MORT:&[f64],n:usize){
+    let max_val = |x: f64, y: f64| if x > y { x } else { y };
+    let sm:Vec<f64> = survival.iter().zip(MORT.iter()).map(|(a,b)| a * b ).collect();
+    let  res_par:Vec<f64> = YIELD.par_iter().map(|&yield_value| { //number of scenarions
+        let mut r = vec![0.0;n]; //accumulated deficiency
+        let mut av = vec![1.0;n];
+        for j in 0..MORT.len() { //number of timepoints
+            let gc : Vec<f64> = av.iter().zip(POL.0.iter()).map(|(a,b)| a * b ).collect();
+            av = av.iter().zip(gc.iter()).map(|(a,b)|a-b).collect();
+            av = av.iter().map(|a|a*yield_value).collect();
+            let bl:Vec<f64> = POL.1.iter().zip(av.iter()).map(|(a,b)|a-b).collect();
+            let b:Vec<f64> = bl.iter().map(|a| a * sm[j]).collect();
+            let e = j as f64 + 1.0;
+            for i in 0..r.len() {
+                let val = (b[i] - gc[i]) / yield_value.powf(e);
+                *r.get_mut(i).unwrap() = max_val(val, r[i]);
+            }
+        }
+        
+        r.iter().map(|a|a).sum()
+        
+    }).collect();
+    res.copy_from_slice(&res_par)
+}
+
+#[allow(non_snake_case)]
+pub fn main(){
+    let τ = 120 * 12; // policy duration
+    let n = 10_000; // number of policies
+    let scen = match env::var("SCENARIOS") { Ok(val) => val, Err(_) => String::new()
+    };
+    let m = scen.parse::<usize>().unwrap_or(12);
+   
+    let MORT=  vec![0.001/12.0; τ];
+    let p: Vec<f64> = MORT.iter().map(|&a| { 1.0 - a }).collect();
+    let mut survival_prod = 1.0;
+    let survival: Vec<f64> = p.iter()
+    .map(|&n| { survival_prod *= n; survival_prod }).collect();
+    let Σ = load_data(m);
+    let POL = (vec![0.02/12.0; n] , vec![1000.0; n]);
+    let YIELD: Vec<f64> = Σ.iter().map(|&a| { 1.0 + a }).collect();
+    let mut res = vec![0.0; m]; // reserve
+
+	sima(&mut res,&survival,&YIELD,&POL,&MORT,n);
+}
+```
+
+"""
+
+# ╔═╡ 534286c2-5f08-41b9-adac-29ecd2d71316
+md"""
+
+#### C++ Code
+
+```Cpp
+
+#include <iostream>
+#include <assert.h>
+
+#include <boost/asio.hpp>
+#include <boost/bind/bind.hpp>
+#include <boost/thread/latch.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/matrix_proxy.hpp>
+
+#include "parallelization.hpp"
+#include "matrix_io.hpp"
+#include "profile.hpp"
+#include "profile_config.hpp"
+#include "collector/json.hpp"
+
+using namespace std;
+using namespace boost;
+using namespace boost::asio;
+
+#if defined(DISABLE_PARALLELIZATION)
+typedef parallelization<parallelism::single_threaded> parallelization_type;
+#else
+typedef parallelization<parallelism::multi_threaded> parallelization_type;
+#endif /* DISABLE_PARALLELIZATION */
+
+/* Constants */
+const size_t POLICY_COUNT = 10000;
+const size_t TIMESTEP_COUNT = 12 * 120;
+
+/* Shorthand for real vector type */
+typedef vector<double> real_vector_type;
+
+/* Modeled policy fields */
+struct policy_record
+{
+	double av;
+	double benefit;
+};
+
+/* Shorthand for policy vector type */
+typedef vector<policy_record> policy_vector_type;
+
+/* Simulation inputs (read-only during simulation phase) */
+struct simulation_input
+{
+	real_vector_type mortality;
+	real_vector_type survival;
+	real_vector_type yield;
+	policy_vector_type inforce;
+};
+
+/* Simulation output(s) (mutable during simulation phase) */
+struct simulation_output
+{
+	real_vector_type reserves;
+};
+
+/* Boost function object called to execute parallel tasks */
+class simulation_tasks
+{
+public:
+	/* Required of function object */
+	typedef size_t result_type;
+
+public:
+	/* Constructor assigns task count and references to synchronization helper, read-only input and muable output */
+	simulation_tasks(size_t count, latch* synchronizer, simulation_input const* input, simulation_output* output) :
+		count_(count),
+		synchronizer_(synchronizer),
+		input_(input),
+		output_(output)
+	{
+		assert(input != NULL);
+		assert(output != NULL);
+	}
+
+	/* Required of function object (bound to task number in scheduling loop) */
+	result_type operator ()(size_t task_number)
+	{
+		assert(task_number < count_);
+
+		double reserve = 0.0;
+		double yield = input().yield[task_number];
+
+		/* Loop over policies */
+		for (policy_vector_type::const_iterator policy_iter = input().inforce.begin(); policy_iter != input().inforce.end(); ++policy_iter)
+		{
+			double compounded_yield = 1.0;
+			double deficiency = 0.0;
+			double av = 1.0;
+
+			/* Loop over timesteps */
+			for (size_t timestep = 0; timestep < TIMESTEP_COUNT; ++timestep)
+			{
+				double charge = av * policy_iter->av;
+
+				av -= charge;
+				av *= yield;
+
+				double benefit = (policy_iter->benefit - av) * input().survival[timestep];
+
+				compounded_yield *= yield;
+				double exposure = (benefit - charge) / compounded_yield;
+
+				if (exposure > deficiency)
+				{
+					deficiency = exposure;
+				}
+			}
+
+			/* Accumulate total reserves over all policies */
+			reserve += deficiency;
+		}
+
+		/* Commit reserve for given scenario */
+		output().reserves[task_number] = reserve;
+
+		/* Deduct number of outstanding scenario-specific parallel calculations */
+		synchronizer_->count_down();
+
+		return task_number;
+	}
+
+	/* Convenience accessor */
+	simulation_input const& input() const
+	{
+		return *input_;
+	}
+
+	/* Convenience accessor */
+	simulation_output& output()
+	{
+		return *output_;
+	}
+
+private:
+	size_t count_;
+	latch* synchronizer_;
+	simulation_input const* input_;
+	simulation_output* output_;
+};
+
+class profiler_subject
+{
+protected:
+	profiler_subject()
+	{
+	}
+
+	std::ostream& progress_line(char const* text = NULL)
+	{
+		std::cerr << "[PROGRESS] ";
+
+		if (text != NULL)
+		{
+			std::cerr << text;
+		}
+
+		return std::cerr;
+	}
+
+private:
+	/* Helper to load tabular CSV source into 1D vector */
+	void load_1d_csv(vector<double>& target, char const* filename)
+	{
+		boost::numeric::ublas::matrix<double> intermediate;
+		load_dense_data(intermediate, filename);
+
+		assert(intermediate.size2() == 1);
+		boost::numeric::ublas::matrix_column<boost::numeric::ublas::matrix<double>> slice = boost::numeric::ublas::column(intermediate, 0);
+
+		target.resize(intermediate.size1());
+		target.assign(slice.begin(), slice.end());
+	}
+
+	/* Helper just for input data */
+	void prepare_input(simulation_input& input)
+	{
+		/* Load vectorized data from disk */
+		load_1d_csv(input.mortality, "mortality.csv");
+		load_1d_csv(input.yield, "sigma.csv");
+		
+		input.survival.reserve(std::max(input.mortality.size(), TIMESTEP_COUNT));
+
+		/* Calculate survival by timestep from mortality rates */
+		double survival = 1.0;
+		for (real_vector_type::const_iterator iter = input.mortality.begin(); iter != input.mortality.end(); ++iter)
+		{
+			survival *= 1.0 - (*iter);
+			/* REVIEW: is application of mortality rate correct? */
+			input.survival.push_back(survival * (*iter));
+		}
+
+		/* Pad survival for timesteps beyond mortality with zero */
+		while (input.survival.size() < TIMESTEP_COUNT)
+		{
+			input.survival.push_back(0.0);
+		}
+
+		/* Adjust returns by 1.0 */
+		for (real_vector_type::iterator iter = input.yield.begin(); iter != input.yield.end(); ++iter)
+		{
+			*iter += 1.0;
+		}
+
+		/* Synthesize (invariant) policy data */
+		input.inforce.resize(POLICY_COUNT);
+		for (policy_vector_type::iterator iter = input.inforce.begin(); iter != input.inforce.end(); ++iter)
+		{
+			iter->av = 0.02 / 12.0;
+			iter->benefit = 1000;
+		}
+	}
+
+	/* Helper just for output data */
+	void prepare_output(simulation_input const& input, simulation_output& output)
+	{
+		output.reserves.resize(input.yield.size());
+	}
+
+protected:
+	/* Setup prepares input and output structures for all trials */
+	void setup()
+	{
+		progress_line("preparing data...") << std::endl;
+
+		prepare_input(input_);
+		prepare_output(input_, output_);
+
+		progress_line("data preparation complete") << std::endl;
+	}
+
+	void begin_sample(int trial)
+	{
+		progress_line() << "starting trial #" << trial << "..." << std::endl;
+	}
+
+	/* Each sample of performance data processes all scenarios, policies and timesteps */
+	void sample(int trial)
+	{
+		size_t scenario_count = output_.reserves.size();
+
+		/* Prepare tasks one-to-one with scenarios */
+		latch synchonizer(scenario_count);
+		simulation_tasks tasks(scenario_count, &synchonizer, &input_, &output_);
+
+		/* Zero reserves across all scenarios */
+		fill(output_.reserves.begin(), output_.reserves.end(), 0.0);
+
+		/* Loop over scenarios */
+		for (size_t i = 0; i < scenario_count; ++i)
+		{
+			/* Schedule each task (all-tasks object bound to a scenario selector (task number) */
+			parallelizer_.post(boost::bind(tasks, i));
+		}
+
+		/* Sample is not complete until all tasks are complete */
+		/* Note the thread pool itsef remains populated for the next trial */
+		synchonizer.wait();
+	}
+
+	void end_sample(int trial)
+	{
+#if defined(DEBUG) || defined(DEBUG_) || defined(DUMP_SELECT_SCENARIO_RESERVES)
+
+#if !defined(DEBUG_SCENARIO_SELECTIONS)
+	#define DEBUG_SCENARIO_SELECTIONS 0,1,2,499,999
+#endif /* !DEBUG_SCENARIO_SELECTIONS */
+
+		size_t selections[] = { DEBUG_SCENARIO_SELECTIONS };		
+		for (size_t i = 0; i < sizeof(selections) / sizeof(selections[0]); ++i)
+		{
+			std::cerr << "[DEBUG] reserve(" << selections[i] << "): " << output_.reserves[selections[i]] << std::endl;
+		}
+
+#endif /* DEBUG */
+
+		progress_line() << "completed trial #" << trial << "..." << std::endl;
+	}
+
+	void teardown()
+	{
+		parallelizer_.join();
+	}
+
+private:
+	parallelization_type parallelizer_;
+	simulation_input input_;
+	simulation_output output_;
+};
+
+int main(int argc, char* argv[])
+{
+	int result = 0;
+	json_output collector;
+	argv_collection arguments(argc - 1, argv + 1);
+	
+	try
+	{
+		profile_config<argv_collection::const_iterator> config(arguments.begin(), arguments.end());
+		profiler<profiler_subject, json_output> metrics(config.get_trial_count(), collector);
+		metrics.run();
+	}
+	catch (std::exception const& e)
+	{
+		std::cerr << "[ERROR] " << e.what() << std::endl;
+		result = 1;
+	}
+	
+	return result;
+}
+```
+
+"""
+
+# ╔═╡ bb9f644d-90c3-4167-aed3-fd8e55b2f422
+md"""
+
+Benchmarking results
+
+$(Resource("https://raw.githubusercontent.com/leeyuntien-milli/LifeMeeting/main/simulation1.png"))
+
+$(Resource("https://raw.githubusercontent.com/leeyuntien-milli/LifeMeeting/main/simulation2.png"))
+
+"""
+
+# ╔═╡ a9c284b4-c851-46f1-b7d2-aa70456ab7d8
+md"""
+## Use case 3 - parameter estimation
+
+In applications like automatic underwriting, channel matching or recommendation systems, one would normally like to find out inherent behavior of a user-attribute matrix by decomposing the matrix into sub-components. One typical technique to decompose matrices is through gradient descents. Since the matrices are usually sparse in insurance applications, the following shows an extension to the procedure to deal with sparse matrices.
+
+"""
+
+# ╔═╡ 753cff1f-0648-43f4-9aaf-56dc4686cd3d
+md"""
+
+#### Julia Code
+
+```Julia
+using PyCall
+using SparseArrays
+
+#f is loaded from a pickle file
+data = pickle.load(f, encoding = "latin1")
+w = sparse(data.nonzero()[1].+1, data.nonzero()[2].+1, data.data)
+X = w[:, 2:size(w)[2]]
+y = w[:, 1]
+κ = 10
+V = rand(X.n, κ)
+ΔV = rand(X.n, κ)
+cross_terms = X * V
+cross_terms = X * V
+square_terms = (X .* X) * (V .* V)
+total_losses = Array(y .- 0.5 .* sum(cross_terms .* cross_terms .- square_terms, dims=2))[:, 1]
+
+function sgd_V(X, total_losses, cross_terms,V,ΔV,κ=10,α=0.99,γ=0.1,λᵥ=0.1)
+  x_loss = copy(X);  xxll = copy(X)
+  currV = copy(V)
+  x_loss.nzval .*=    
+      total_losses[X.rowval];    
+  x_loss.nzval ./= X.m
+  xxll .*= xxll; xxll.nzval .*=  
+     total_losses[X.rowval]; 
+  xxll.nzval./=X.m; 
+  xxl = sum(xxll, dims=1)
+  xvxl = x_loss' * cross_terms
+   @inbounds for f in 1:κ
+      @inbounds for i in 1:X.n
+         V[i, f] -= α * ((xvxl[i, f] - xxl[i] * V[i, f]) + γ * ΔV[i, f] + λᵥ * V[i, f])
+        end
+    end
+    ΔV .= currV .- V
+end
 
 ```
 
 """
 
-# ╔═╡ ab4a3d0c-e83a-4d24-a3a7-7a5b8400bc20
-md" # [Switch to Case study here]"
+# ╔═╡ 22270d64-5a92-4677-8d91-c4f5644e6bd3
+md"""
+
+#### Python Code
+
+```Python
+def setup():
+    path = "df_csr.pickle"
+    f = open(path, "rb")
+    w = pickle.load(f, encoding="latin1") 
+    X = w[:, 1:w.shape[1]]
+    y = w[:, 0];   k = 10
+    num_samples, num_attr = X.shape
+    V = np.random.rand(num_attr, k)
+    cross_terms = X * V
+    square_terms = X.multiply(X) * np.multiply(V, V)
+    total_losses = y.toarray().flatten() - 0.5 * (np.multiply(cross_terms, cross_terms) - square_terms).sum(axis = 1)
+    delta_V = np.random.rand(num_attr, k)
+    return X, total_losses,cross_terms,   
+           V, delta_V
+
+def sgd_V(X, total_losses, cross_terms, v, dv,
+    k=10, learning_rate=0.99, m_r=0.1, m_l=0.1):
+    V = v.copy()
+    delta_V = dv.copy()
+    x_loss = scipy.sparse.csr_matrix.copy(X)
+    currV = np.matrix.copy(V)
+    x_loss = X.multiply(total_losses) / X.shape[0]
+    xxl = X.multiply(X).multiply(total_losses)
+           .sum(axis=0) / X.shape[0]
+    xvxl = x_loss.T * cross_terms
+    for f in range(k):
+        for i in range(X.shape[1]):
+            V[i, f] -= learning_rate * \
+                ((xvxl[i, f] - xxl[0, i] * V[i, f])   
+            + m_r * delta_V[i, f] + m_l * V[i, f])
+    delta_V = currV - V
+    return delta_V
+
+```
+
+"""
+
+# ╔═╡ f531927b-0cf2-4ad6-aaff-93457d292c5b
+md"""
+
+#### Rust Code
+
+```Rust
+#![allow(non_snake_case)]
+use std::{time::Instant};
+use nalgebra_sparse::{CsrMatrix};
+use nalgebra::{Matrix, VecStorage, Dyn};
+use sparse_sgd::*;
+
+fn sgd_V(x:&CsrMatrix<f64>,
+    total_losses:&Vec<f64>,
+    cross_terms:Matrix<f64, Dyn, Dyn, VecStorage<f64,Dyn,Dyn>>,
+    v:Matrix<f64, Dyn, Dyn, VecStorage<f64,Dyn,Dyn>>,
+    dv:Matrix<f64, Dyn, Dyn, VecStorage<f64,Dyn,Dyn>>,
+)->Matrix<f64, Dyn, Dyn, VecStorage<f64,Dyn,Dyn>>{
+
+    let k:usize=10 ;
+    let learning_rate=0.99;
+    let m_r=0.1;
+    let m_l=0.1;
+    
+    let mut V = v.clone();
+    let mut delta_V = dv.clone();
+    let currV = v.clone();
+
+    //X shape is (1475055,101856)
+    let xrows:f64 = x.nrows()  as f64;
+    let xcols:usize = x.ncols();
+    let x_loss =  (&x.multiply_vec(&total_losses))/xrows;
+    
+    //A difference from Python script is that we don't divide
+    // by xrows here, but instead in the loop further down
+    let xxl = &x.multiply_csr(&x).multiply_vec(&total_losses).sumnnz(); 
+
+    let xvxl = x_loss.transpose()*cross_terms;
+
+     for f in 0..k {
+        for i in 0..xcols {
+            V[(i, f)] -= learning_rate * 
+                ((xvxl[(i, f)] - xxl[i]/xrows * V[(i, f)]) + 
+                m_r * delta_V[(i, f)] + m_l * V[(i, f)]);
+        }
+    }
+
+    delta_V = currV - v;
+    return delta_V
+}
+fn main() {
+    
+    let w =  coo_matrix("coo.json");
+    let m1 = w.select(0..w.nrows(),0..11) ;
+    let m2 = w.select(0..w.nrows(),12..w.ncols()) ;
+    let x = hcat(&m1,&m2);
+    let y = w.select(0..w.nrows(), 11..12);
+    
+    let v1 = read_matrix("v1.json", 101856,10);
+    
+    let cross_terms = x.clone()*v1;
+    
+    let yrows = y.nrows();
+    
+    let mut total_losses = vec![0.0; yrows];
+
+    for k in 0..y.row_indices().len() {
+        total_losses[k] = y.values()[k];
+    }
+
+    let v = read_matrix("v.json", 101856,10);
+    let delta_v = read_matrix("dv.json", 101856,10);
+
+    let before = Instant::now();
+    sgd_V(&x, &total_losses, cross_terms,v,delta_v);
+    let elapsed = before.elapsed();
+    println!("Elapsed time: {:.6?} seconds ({:.2?})", elapsed.as_secs_f32(),elapsed);
+    //println!("{:?}",result[(0,0)])
+    
+}    
+```
+
+"""
+
+# ╔═╡ 96a95a8a-4b7b-4b7d-b7e7-3a0c7a9439e6
+md"""
+
+#### C++ Code
+
+```Cpp
+﻿#if !defined(DEBUG) && !defined(_DEBUG) && !defined(NDEBUG)
+#pragma message("Warning: boost will compiled with checks on non-debug build (NDEBUG should be defined but is not)")
+#endif
+
+#include <iostream>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/matrix_sparse.hpp>
+
+#include "matrix_io.hpp"
+#include "matrix_ops.hpp"
+
+#if defined(DEBUG) || defined(_DEBUG) || defined(INCLUDE_MATRIX_DEBUG)
+#include "matrix_debug.hpp"
+#endif
+
+#include "profile.hpp"
+#include "profile_config.hpp"
+#include "collector/json.hpp"
+
+using namespace boost;
+using namespace boost::numeric::ublas;
+
+class profiler_subject
+{
+protected:
+	typedef double sparse_matrix_double_t;
+	typedef coordinate_matrix<sparse_matrix_double_t> sparse_double_matrix_t;
+	typedef matrix<sparse_matrix_double_t> dense_double_matrix_t;
+
+protected:
+	std::ostream& progress_line(char const* text = NULL)
+	{
+		std::cerr << "[PROGRESS] ";
+
+		if (text != NULL)
+		{
+			std::cerr << text;
+		}
+
+		return std::cerr;
+	}
+
+	template <class MATRIX_TYPE>
+	void emit_progress(MATRIX_TYPE const& matrix, char const* name, char const* status = NULL)
+	{
+		if (status == NULL)
+		{
+			status = "ready";
+		}
+
+		progress_line() << "matrix " << name << " (" << matrix.size1() << ',' << matrix.size2() << ") " << status << "..." << std::endl;
+		dump_matrix(matrix, name);
+	}
+
+protected:
+	static void sgd_V(dense_double_matrix_t& result, sparse_double_matrix_t& x, dense_double_matrix_t& total_losses, dense_double_matrix_t& cross_terms, dense_double_matrix_t& v, dense_double_matrix_t const& dv, int k = 10, double alpha = 0.99, double gamma = 0.1, double lambda = 0.1)
+	{
+		double x_row_count_reciprocal = 1.0 / static_cast<double>(x.size1());
+
+		coordinate_matrix<sparse_double_matrix_t::value_type> x_loss(x.size2(), x.size1(), x.nnz());
+		vector<sparse_double_matrix_t::value_type> xxl(x.size2());
+
+		/* Boost documentation says the vector above will be zero-filled, but Microsoft debug builds violate this expectation (std::allocator issue) */
+#if defined(_DEBUG) && defined(_MSC_VER)
+		xxl.clear();
+#endif /* _DEBUG && _MSC_VER */
+
+		for (sparse_double_matrix_t::iterator1 major = x.begin1(); major != x.end1(); ++major)
+		{
+			for (sparse_double_matrix_t::iterator2 minor = major.begin(); minor != major.end(); ++minor)
+			{
+				sparse_double_matrix_t::value_type xelement = *minor;
+				sparse_double_matrix_t::value_type loss = xelement * total_losses(minor.index1(), 0);
+				x_loss.append_element(minor.index2(), minor.index1(), loss * x_row_count_reciprocal);
+				xxl[minor.index2()] += loss * xelement;
+			}
+		}
+
+		xxl *= x_row_count_reciprocal;
+
+		dense_double_matrix_t xvxl;
+		matrix_multiply(x_loss, cross_terms, xvxl);
+
+		dense_double_matrix_t v_modified(v);
+
+		for (size_t f = 0; f < static_cast<size_t>(k); ++f)
+		{
+			for (size_t i = 0; i < x.size2(); ++i)
+			{
+				dense_double_matrix_t::value_type& vref(v_modified.at_element(i, f));
+				vref -= alpha * ((xvxl(i, f) - xxl[i] * vref) + gamma * dv(i, f) + lambda * vref);
+			}
+		}
+
+		v_modified *= -1.0;
+		v_modified += v;
+		result.assign_temporary(v_modified);
+	}
+
+	void setup()
+	{
+		static char const* dense_load_status = "loaded from dense (tabular) datafile";
+		static char const* computed_status = "computed";
+
+		progress_line("preparing data...") << std::endl;
+
+		load_cartesian_data(x_, "x_sparse_1.csv", "x_sparse_2.csv");
+		emit_progress(x_, "x", "loaded from sparse (coordinate) datafile");
+
+		load_dense_data(y_, "y.csv");
+		emit_progress(y_, "y", dense_load_status);
+		
+		dense_double_matrix_t v;
+		load_dense_data(v, "v1.csv");
+		emit_progress(v, "v[temp]", dense_load_status);
+
+		matrix_multiply(x_, v, cross_terms_);
+		emit_progress(cross_terms_, "cross-terms", computed_status);
+
+		load_dense_data(v_, "v.csv");
+		emit_progress(v_, "v", dense_load_status);
+
+		load_dense_data(dv_, "dv.csv");
+		emit_progress(dv_, "dv", dense_load_status);
+	}
+
+	void begin_sample(int trial)
+	{
+		progress_line() << "starting trial #" << trial << "..." << std::endl;
+	}
+
+	void sample(int trial)
+	{
+		sgd_V(result_, x_, y_, cross_terms_, v_, dv_);
+	}
+
+	void end_sample(int trial)
+	{
+		emit_progress(result_, "result", "computed");
+		progress_line() << "completed trial #" << trial << "..." << std::endl;
+	}
+
+	void teardown()
+	{
+		progress_line("done") << std::endl;
+	}
+
+private:
+	sparse_double_matrix_t x_;
+	dense_double_matrix_t y_;
+	dense_double_matrix_t v_;
+	dense_double_matrix_t cross_terms_;
+	dense_double_matrix_t dv_;
+	dense_double_matrix_t result_;
+};
+
+int main(int argc, char* argv[])
+{
+	int result = 0;
+	json_output collector;
+	argv_collection arguments(argc - 1, argv + 1);
+	
+	try
+	{
+		profile_config<argv_collection::const_iterator> config(arguments.begin(), arguments.end());
+		profiler<profiler_subject, json_output> metrics(config.get_trial_count(), collector);
+		metrics.run();
+	}
+	catch (std::exception const& e)
+	{
+		std::cerr << "[ERROR] " << e.what() << std::endl;
+		result = 1;
+	}
+	
+	return result;
+}
+```
+
+"""
+
+# ╔═╡ ba07960a-f377-4de3-bd04-283908c812e4
+md"""
+
+Benchmarking results
+
+$(Resource("https://raw.githubusercontent.com/leeyuntien-milli/LifeMeeting/main/sparsesgd1.png"))
+
+$(Resource("https://raw.githubusercontent.com/leeyuntien-milli/LifeMeeting/main/sparsesgd2.png"))
+
+"""
 
 # ╔═╡ ad53dcdd-30a7-4b24-84c6-9fcf6e60ded8
 md"""
@@ -633,10 +1714,11 @@ md"""
 
 Nearing 10,000 registered packages as of July 2023.
 
-## Data Science 
+## Misc Packages
 
-### Key packages:
+### Data Science:
 - **DataFrames.jl**
+  - **DataFramesMeta.jl** or **Tidier.jl** for R-like syntax
 - **CSV.jl**
 - **Distributions.jl**
 - **StatsBase.jl**
@@ -647,14 +1729,14 @@ Nearing 10,000 registered packages as of July 2023.
 
 Many options available. Suggestions:
 
-- **Plots.jl** Full-featured frontend with swappable backend (~15s TTFP)
-- **Makie.jl** Full-featured frontend with swappable backend (~45s TTFP)
+- **Plots.jl** Straightforward & robust plotting
+- **Makie.jl** Very powerful plotting package
   - The most powerful plotting package (of any language?)
   - https://lazarusa.github.io/BeautifulMakie/
 - **Gadfly.jl** grammar-of-graphics like package
 - **Bokeh** and **Plotly** - Interactive web plots
 
-### Statistics & Machine Leanring
+### Statistics & Machine Learning
 
 - StatsBase
 - Turing.jl - Bayesian probabilistic programming
@@ -662,15 +1744,15 @@ Many options available. Suggestions:
 - Flux.jl - neural nets
 - ...
 
-### Learning
+### Other
 
-It's worth an entire session on its own, but some online resources:
-
-- https://juliaacademy.com/ - Online video courses
-- https://ucidatascienceinitiative.github.io/IntroToJulia/ - UC Irvine Data Science course
-- https://www.juliafordatascience.com/ - Tutorials
-- https://juliadatascience.io/ - Online book
-- ... many more online
+- Optimization
+- Automatic differentiation
+- Machine learning
+- Differential Equations
+- Web servers & web scraping
+- Dashboards
+- Quantum Computing
 
 """
 
@@ -708,51 +1790,51 @@ The homepage at [https://juliaactuary.org/](https://juliaactuary.org/) has docum
 """
 
 # ╔═╡ be39b864-45cb-480d-9bb2-67d56a495147
-md"## An integrated example"
+md"### An integrated example"
 
 # ╔═╡ af9484e7-7f5c-448e-9b49-a2a9adbcc596
 md"""
 
-### Yields and Rates
+#### Yields and Rates
 
-#### `Rate`s
+##### `Rate`s
 
 `Rate`s are a type defined in Yields.jl:
 """
 
 # ╔═╡ f506bcbe-4d67-4e61-8b2f-af23b0ddf1cd
 rates = [
-	Periodic(0.04, 1),
-	Periodic(0.04, 2),
-	Continuous(0.04),
+    Periodic(0.04, 1),
+    Periodic(0.04, 2),
+    Continuous(0.04),
 ]
-	
+
 
 # ╔═╡ b3238c9a-a7bc-4dbe-9657-fc23144a400c
 c = Continuous(0.04)
 
 # ╔═╡ 969ecaae-c39c-46e6-b7b8-0c6fd910339b
-accumulation.(rates,1) # accumulate the rates for 1 period
+accumulation.(rates, 1) # accumulate the rates for 1 period
 
 # ╔═╡ 119b6051-c1f3-41e5-a415-4358d1366703
-discount.(rates,1) # discount factors for 1 period
+discount.(rates, 1) # discount factors for 1 period
 
 # ╔═╡ e92df94f-cb38-486f-89be-5b8a39aa59c9
-yield = let 
-	# 2021-03-31 rates from Treasury.gov
-	rates = [0.01, 0.01, 0.03, 0.05, 0.07, 0.16, 0.35, 0.92, 1.40, 1.74, 2.31, 2.41]
+yield = let
+    # 2021-03-31 rates from Treasury.gov
+    rates = [0.01, 0.01, 0.03, 0.05, 0.07, 0.16, 0.35, 0.92, 1.40, 1.74, 2.31, 2.41]
 
-	rates = rates ./ 100 # convert from percents to rates
-	
-	maturities = [1 / 12, 2 / 12, 3 / 12, 6 / 12, 1, 2, 3, 5, 7, 10, 20, 30]
-	yield = Yields.CMT(rates, maturities)
+    rates = rates ./ 100 # convert from percents to rates
+
+    maturities = [1 / 12, 2 / 12, 3 / 12, 6 / 12, 1, 2, 3, 5, 7, 10, 20, 30]
+    yield = Yields.CMT(rates, maturities)
 end
 
 # ╔═╡ 9655b919-bc39-4055-a12c-4c57cf2cff8b
-forward(yield,0,10)
+forward(yield, 0, 10)
 
 # ╔═╡ a0af8bfc-357c-452f-9b0f-4b6bef4c2714
-md" ### Mortality and other rate tables
+md" #### Mortality and other rate tables
 
 For example, the [2001 VBT Male NS table](https://mort.soa.org/ViewTable.aspx?&TableIdentity=1118)"
 
@@ -772,13 +1854,13 @@ vbt2001.select[65][65:end]
 vbt2001.select[65][65:70]
 
 # ╔═╡ 7238532c-f2b0-4b63-b028-109caf2c196b
-md"#### Survival and decrements"
+md"##### Survival and decrements"
 
 # ╔═╡ 9675af2c-f6e1-4fbb-8b85-221226d0bd2b
-survival(vbt2001.ultimate,65,70), decrement(vbt2001.ultimate,65,70)
+survival(vbt2001.ultimate, 65, 70), decrement(vbt2001.ultimate, 65, 70)
 
 # ╔═╡ 0165537c-7735-4a07-859a-a09a43f4b494
-md"### Life Contingencies"
+md"#### Life Contingencies"
 
 # ╔═╡ 5332aae1-11ff-42f4-adbf-b131a8b238bc
 issue_age = 30
@@ -800,25 +1882,25 @@ timepoints(insurance) |> collect
 probability(insurance) |> collect
 
 # ╔═╡ f5c0f9bc-1032-4ab8-b7bd-8149e8d77118
-benefit(insurance) 
+benefit(insurance)
 
 # ╔═╡ c96d27e5-fe7a-46a4-944c-38b767e1b885
 survival(insurance) |> collect
 
 # ╔═╡ de6303ac-8da9-4848-ad7e-714ca2c894bb
-md"### Financial Maths"
+md"#### Financial Maths"
 
 # ╔═╡ 5405b11b-288e-4e06-917c-1eb6a82a1ac9
 pv(insurance)
 
 # ╔═╡ 00567c83-29fc-47a8-911a-a28e77ded7b2
-duration(yield,cashflows(insurance))
+duration(yield, cashflows(insurance))
 
 # ╔═╡ 94264fcb-b69f-4f9b-b8bb-83c31e22ffb1
-convexity(yield,cashflows(insurance))
+convexity(yield, cashflows(insurance))
 
 # ╔═╡ 4cb7f1e1-8a07-4bd3-b92e-1a6c0ff3698f
-reserve = pv(yield,cashflows(insurance))
+reserve = pv(yield, cashflows(insurance))
 
 # ╔═╡ d73421f8-e2e9-4b9a-90af-d7625a1d30c5
 # `...` "splats" the lazy values into an array
@@ -827,23 +1909,20 @@ cf_vector = [-reserve; cashflows(insurance)...]
 # ╔═╡ 0bfc0522-10a1-4d08-a8fb-5c0dcbe1db77
 irr(cf_vector)
 
-# ╔═╡ c7da89f1-33f2-44e9-aa30-49f7da89632d
-@bind reserve_scalar Slider(0.9:0.01:1.1,default=1;show_value=true)
-
-# ╔═╡ 6d405814-7f56-4534-abc8-262a7f5a1750
-let 
-	cfs = [
-		-reserve * reserve_scalar;
-		cashflows(insurance)...
-	]
-	
-	irr(cfs)
-end
-
 # ╔═╡ 3b3c4951-7c85-41b1-9f5b-1a23f4b4c465
 md""" # Endnotes
 
-## Further Reading
+## Learning
+
+It's worth an entire session on its own, but some online resources:
+
+- https://juliaacademy.com/ - Online video courses
+- https://ucidatascienceinitiative.github.io/IntroToJulia/ - UC Irvine Data Science course
+- https://www.juliafordatascience.com/ - Tutorials
+- https://juliadatascience.io/ - Online book
+- ... many more online
+
+## More stuff for actuaries
 
 - This presentation is a conglomeration of code and ideas from pages/notebooks on JuliActuary.org:
   - [Tutorials and examples](https://juliaactuary.org/community/#learn)
@@ -922,6 +2001,7 @@ BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 CondaPkg = "992eb4ea-22a4-4c89-a5bb-47a3300528ab"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 LifeContingencies = "c8f0d631-89cd-4a1f-93d0-7542c3692561"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 MortalityTables = "4780e19d-04b9-53dc-86c2-9e9aa59b5a12"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 ProgressLogging = "33c8b6b6-d38a-422a-b730-caa89a2f386c"
@@ -932,9 +2012,9 @@ Yields = "d7e99b2f-e7f3-4d9e-9f01-2338fc023ad3"
 ActuaryUtilities = "~3.12.0"
 BenchmarkTools = "~1.3.2"
 CondaPkg = "~0.2.18"
-DataFrames = "~1.5.0"
+DataFrames = "~1.6.0"
 LifeContingencies = "~2.3.1"
-MortalityTables = "~2.4.0"
+MortalityTables = "~2.5.0"
 PlutoUI = "~0.7.51"
 ProgressLogging = "~0.1.4"
 PythonCall = "~0.9.13"
@@ -945,9 +2025,9 @@ Yields = "~3.5.0"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.9.1"
+julia_version = "1.9.2"
 manifest_format = "2.0"
-project_hash = "4e697293c6fbee9819a43d9c9d81f1b5905de09d"
+project_hash = "a900ce7a1aeaa922304e0fc2524b283c61c72cb4"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -1152,7 +2232,7 @@ weakdeps = ["Dates", "LinearAlgebra"]
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-version = "1.0.2+0"
+version = "1.0.5+0"
 
 [[deps.CompositionsBase]]
 git-tree-sha1 = "802bb88cd69dfd1509f6670416bd4434015693ad"
@@ -1208,16 +2288,16 @@ uuid = "9a962f9c-6df0-11e9-0e5d-c546b8b5ee8a"
 version = "1.15.0"
 
 [[deps.DataFrames]]
-deps = ["Compat", "DataAPI", "Future", "InlineStrings", "InvertedIndices", "IteratorInterfaceExtensions", "LinearAlgebra", "Markdown", "Missings", "PooledArrays", "PrettyTables", "Printf", "REPL", "Random", "Reexport", "SentinelArrays", "SnoopPrecompile", "SortingAlgorithms", "Statistics", "TableTraits", "Tables", "Unicode"]
-git-tree-sha1 = "aa51303df86f8626a962fccb878430cdb0a97eee"
+deps = ["Compat", "DataAPI", "Future", "InlineStrings", "InvertedIndices", "IteratorInterfaceExtensions", "LinearAlgebra", "Markdown", "Missings", "PooledArrays", "PrecompileTools", "PrettyTables", "Printf", "REPL", "Random", "Reexport", "SentinelArrays", "SortingAlgorithms", "Statistics", "TableTraits", "Tables", "Unicode"]
+git-tree-sha1 = "089d29c0fc00a190661517e4f3cba5dcb3fd0c08"
 uuid = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
-version = "1.5.0"
+version = "1.6.0"
 
 [[deps.DataStructures]]
 deps = ["Compat", "InteractiveUtils", "OrderedCollections"]
-git-tree-sha1 = "d1fff3a548102f48987a52a2e0d114fa97d730f0"
+git-tree-sha1 = "cf25ccb972fec4e4817764d01c82386ae94f77b4"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
-version = "0.18.13"
+version = "0.18.14"
 
 [[deps.DataValueInterfaces]]
 git-tree-sha1 = "bfc1187b79289637fa0ef6d4436ebdfe6905cbd6"
@@ -1257,9 +2337,9 @@ uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 
 [[deps.Distributions]]
 deps = ["FillArrays", "LinearAlgebra", "PDMats", "Printf", "QuadGK", "Random", "SparseArrays", "SpecialFunctions", "Statistics", "StatsAPI", "StatsBase", "StatsFuns", "Test"]
-git-tree-sha1 = "db40d3aff76ea6a3619fdd15a8c78299221a2394"
+git-tree-sha1 = "e76a3281de2719d7c81ed62c6ea7057380c87b1d"
 uuid = "31c24e10-a181-5473-b8eb-7969acd0382f"
-version = "0.25.97"
+version = "0.25.98"
 
     [deps.Distributions.extensions]
     DistributionsChainRulesCoreExt = "ChainRulesCore"
@@ -1416,9 +2496,9 @@ version = "0.1.15"
 
 [[deps.HypergeometricFunctions]]
 deps = ["DualNumbers", "LinearAlgebra", "OpenLibm_jll", "SpecialFunctions"]
-git-tree-sha1 = "0ec02c648befc2f94156eaef13b0f38106212f3f"
+git-tree-sha1 = "83e95aaab9dc184a6dcd9c4c52aa0dc26cd14a1d"
 uuid = "34004b35-14d8-5ef3-9330-4cdb6864b03a"
-version = "0.3.17"
+version = "0.3.21"
 
 [[deps.Hyperscript]]
 deps = ["Test"]
@@ -1593,9 +2673,9 @@ uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
 [[deps.LoopVectorization]]
 deps = ["ArrayInterface", "ArrayInterfaceCore", "CPUSummary", "CloseOpenIntervals", "DocStringExtensions", "HostCPUFeatures", "IfElse", "LayoutPointers", "LinearAlgebra", "OffsetArrays", "PolyesterWeave", "PrecompileTools", "SIMDTypes", "SLEEFPirates", "Static", "StaticArrayInterface", "ThreadingUtilities", "UnPack", "VectorizationBase"]
-git-tree-sha1 = "e4eed22d70ac91d7a4bf9e0f6902383061d17105"
+git-tree-sha1 = "24e6c5697a6c93b5e10af2acf95f0b2e15303332"
 uuid = "bdcacae8-1622-11e9-2a5c-532679323890"
-version = "0.12.162"
+version = "0.12.163"
 weakdeps = ["ChainRulesCore", "ForwardDiff", "SpecialFunctions"]
 
     [deps.LoopVectorization.extensions]
@@ -1674,9 +2754,9 @@ uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
 [[deps.MortalityTables]]
 deps = ["Memoize", "OffsetArrays", "Parsers", "Pkg", "QuadGK", "Requires", "StringDistances", "UnPack", "XMLDict"]
-git-tree-sha1 = "a69bda1f145fa4410821a57134150cb459220dcb"
+git-tree-sha1 = "ca3a8be338a505aa19e8c9d3c0fe5f4c903779c1"
 uuid = "4780e19d-04b9-53dc-86c2-9e9aa59b5a12"
-version = "2.4.0"
+version = "2.5.0"
 
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
@@ -1705,9 +2785,9 @@ version = "1.2.0"
 
 [[deps.OffsetArrays]]
 deps = ["Adapt"]
-git-tree-sha1 = "82d7c9e310fe55aa54996e6f7f94674e2a38fcb4"
+git-tree-sha1 = "2ac17d29c523ce1cd38e27785a7d23024853a4bb"
 uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
-version = "1.12.9"
+version = "1.12.10"
 
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
@@ -1769,7 +2849,7 @@ version = "1.3.0"
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
-version = "1.9.0"
+version = "1.9.2"
 
 [[deps.PlutoUI]]
 deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "FixedPointNumbers", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "MIMEs", "Markdown", "Random", "Reexport", "URIs", "UUIDs"]
@@ -1809,9 +2889,9 @@ version = "1.4.0"
 
 [[deps.PrettyTables]]
 deps = ["Crayons", "Formatting", "LaTeXStrings", "Markdown", "Reexport", "StringManipulation", "Tables"]
-git-tree-sha1 = "213579618ec1f42dea7dd637a42785a608b1ea9c"
+git-tree-sha1 = "331cc8048cba270591eab381e7aa3e2e3fef7f5e"
 uuid = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
-version = "2.2.4"
+version = "2.2.5"
 
 [[deps.Printf]]
 deps = ["Unicode"]
@@ -1979,15 +3059,19 @@ weakdeps = ["OffsetArrays", "StaticArrays"]
     StaticArrayInterfaceStaticArraysExt = "StaticArrays"
 
 [[deps.StaticArrays]]
-deps = ["LinearAlgebra", "Random", "StaticArraysCore", "Statistics"]
-git-tree-sha1 = "832afbae2a45b4ae7e831f86965469a24d1d8a83"
+deps = ["LinearAlgebra", "Random", "StaticArraysCore"]
+git-tree-sha1 = "fffc14c695c17bfdbfa92a2a01836cdc542a1e46"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "1.5.26"
+version = "1.6.1"
+weakdeps = ["Statistics"]
+
+    [deps.StaticArrays.extensions]
+    StaticArraysStatisticsExt = "Statistics"
 
 [[deps.StaticArraysCore]]
-git-tree-sha1 = "6b7ba252635a5eff6a0b0664a41ee140a1c9e72a"
+git-tree-sha1 = "1d5708d926c76a505052d0d24a846d5da08bc3a4"
 uuid = "1e83bf80-4336-4d27-bf5d-d5a4f845583c"
-version = "1.4.0"
+version = "1.4.1"
 
 [[deps.Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
@@ -2086,15 +3170,29 @@ uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [[deps.ThreadingUtilities]]
 deps = ["ManualMemory"]
-git-tree-sha1 = "c97f60dd4f2331e1a495527f80d242501d2f9865"
+git-tree-sha1 = "eda08f7e9818eb53661b3deb74e3159460dfbc27"
 uuid = "8290d209-cae3-49c0-8002-c8c24d57dab5"
-version = "0.5.1"
+version = "0.5.2"
 
 [[deps.Transducers]]
 deps = ["Adapt", "ArgCheck", "BangBang", "Baselet", "CompositionsBase", "DefineSingletons", "Distributed", "InitialValues", "Logging", "Markdown", "MicroCollections", "Requires", "Setfield", "SplittablesBase", "Tables"]
-git-tree-sha1 = "25358a5f2384c490e98abd565ed321ffae2cbb37"
+git-tree-sha1 = "a66fb81baec325cf6ccafa243af573b031e87b00"
 uuid = "28d57a85-8fef-5791-bfe6-a80928e7c999"
-version = "0.4.76"
+version = "0.4.77"
+
+    [deps.Transducers.extensions]
+    TransducersBlockArraysExt = "BlockArrays"
+    TransducersDataFramesExt = "DataFrames"
+    TransducersLazyArraysExt = "LazyArrays"
+    TransducersOnlineStatsBaseExt = "OnlineStatsBase"
+    TransducersReferenceablesExt = "Referenceables"
+
+    [deps.Transducers.weakdeps]
+    BlockArrays = "8e7c35d0-a365-5155-bbbb-fb81a777f24e"
+    DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+    LazyArrays = "5078a376-72f3-5289-bfd5-ec5146d43c02"
+    OnlineStatsBase = "925886fa-5bf2-5e8e-b522-a9147a512338"
+    Referenceables = "42d2dcc6-99eb-4e98-b66c-637b7d73030e"
 
 [[deps.Tricks]]
 git-tree-sha1 = "aadb748be58b492045b4f56166b5188aa63ce549"
@@ -2125,15 +3223,17 @@ uuid = "b8865327-cd53-5732-bb35-84acbb429228"
 version = "2.12.4"
 
 [[deps.Unitful]]
-deps = ["ConstructionBase", "Dates", "LinearAlgebra", "Random"]
-git-tree-sha1 = "ba4aa36b2d5c98d6ed1f149da916b3ba46527b2b"
+deps = ["Dates", "LinearAlgebra", "Random"]
+git-tree-sha1 = "c4d2a349259c8eba66a00a540d550f122a3ab228"
 uuid = "1986cc42-f94f-5a68-af5c-568840ba703d"
-version = "1.14.0"
+version = "1.15.0"
 
     [deps.Unitful.extensions]
+    ConstructionBaseUnitfulExt = "ConstructionBase"
     InverseFunctionsUnitfulExt = "InverseFunctions"
 
     [deps.Unitful.weakdeps]
+    ConstructionBase = "187b0558-2788-49d3-abe0-74a17ed4e7c9"
     InverseFunctions = "3587e190-3f89-42d0-90ee-14403ec27112"
 
 [[deps.UnsafePointers]]
@@ -2229,19 +3329,17 @@ version = "17.4.0+0"
 # ╠═e26e3daf-ee55-434d-9d46-c083537df72a
 # ╟─47556a7c-230a-4211-af06-f6fb61fbd7c1
 # ╠═ae5ed9ec-c4a3-4765-a3e2-35e9e2a285f1
-# ╟─8855b283-153e-4b9c-9758-97e0dea133a4
+# ╠═8855b283-153e-4b9c-9758-97e0dea133a4
 # ╠═dcaec0a0-ba12-4021-8169-9a4043e38758
 # ╠═7c668208-8fe7-4f9d-b23c-4725a244d176
 # ╟─6e4662da-72a5-42a5-80c5-a5846513a1ff
 # ╟─37e2e205-0c7e-4135-9e25-901d03fe38a1
 # ╠═4daea69e-a4b5-48f6-b932-b90a38544105
 # ╠═519a702a-0dfd-4ecd-a66e-58a5bac0d97b
-# ╟─adcc763b-b35d-4e3d-af26-dcbe3e648830
-# ╠═6124bd7b-b49e-42c8-9957-5425d78420a8
-# ╟─c414d316-454e-4a0c-aeac-54826cc6b203
 # ╠═51105b4d-cd07-4244-9715-7160e629f998
 # ╠═5c7f46f6-3a9d-430e-85ce-c692b6903845
-# ╟─a1ea0a4f-8074-4a3f-a88b-eb9f4e8ece3d
+# ╟─c414d316-454e-4a0c-aeac-54826cc6b203
+# ╠═a1ea0a4f-8074-4a3f-a88b-eb9f4e8ece3d
 # ╟─baee42c3-b745-4657-8904-56e3f69c66ca
 # ╠═4b92b938-b5e1-4389-9a94-f8ded9d8c4d9
 # ╠═9a237e79-80ec-4dce-a3f4-4856ae8dcd5b
@@ -2249,8 +3347,28 @@ version = "17.4.0+0"
 # ╟─721d4318-071b-4ff2-a29f-a005b4ff2ffc
 # ╠═009b8e21-a7a2-41d0-af6c-5be89ea819f7
 # ╠═1d6c8644-fe0e-48c7-8bf0-e69ce366922a
-# ╠═19218504-c053-41bf-a089-4af8d1d652a8
+# ╟─00ec6209-f11b-468b-aee5-70689d82c1ea
 # ╟─ab4a3d0c-e83a-4d24-a3a7-7a5b8400bc20
+# ╟─db87f649-4680-4e5a-9ec0-1e2d998f8205
+# ╟─1465fdd0-f13b-4eee-a7d5-3fde591dea55
+# ╟─0810b84a-3129-4809-b71b-9155354985d0
+# ╠═30427a18-e235-41e4-8524-3148a659ddb8
+# ╟─43ac6ec6-7a55-4cba-a4db-f2f9758ac7ac
+# ╟─8b7ceb12-548c-49e0-af3a-6bb101a581e6
+# ╟─75338a1c-9684-4bf7-9952-cdeaf315e15b
+# ╟─675e95d9-2d12-4324-9418-a12de6e8c082
+# ╟─cceb9793-c1fc-437d-8b76-e613da8212b6
+# ╟─b4fa8e12-1a5a-4b57-970d-b8c877233c25
+# ╟─00570477-26d7-4030-9ae9-3baaf0cef8a9
+# ╟─8da63366-88ea-48c1-a696-0a3442793232
+# ╟─534286c2-5f08-41b9-adac-29ecd2d71316
+# ╟─bb9f644d-90c3-4167-aed3-fd8e55b2f422
+# ╟─a9c284b4-c851-46f1-b7d2-aa70456ab7d8
+# ╟─753cff1f-0648-43f4-9aaf-56dc4686cd3d
+# ╟─22270d64-5a92-4677-8d91-c4f5644e6bd3
+# ╟─f531927b-0cf2-4ad6-aaff-93457d292c5b
+# ╟─96a95a8a-4b7b-4b7d-b7e7-3a0c7a9439e6
+# ╟─ba07960a-f377-4de3-bd04-283908c812e4
 # ╟─ad53dcdd-30a7-4b24-84c6-9fcf6e60ded8
 # ╟─e94fc916-27a9-448d-9237-65a8e954e2af
 # ╟─be39b864-45cb-480d-9bb2-67d56a495147
@@ -2286,8 +3404,6 @@ version = "17.4.0+0"
 # ╠═4cb7f1e1-8a07-4bd3-b92e-1a6c0ff3698f
 # ╠═d73421f8-e2e9-4b9a-90af-d7625a1d30c5
 # ╠═0bfc0522-10a1-4d08-a8fb-5c0dcbe1db77
-# ╠═c7da89f1-33f2-44e9-aa30-49f7da89632d
-# ╠═6d405814-7f56-4534-abc8-262a7f5a1750
 # ╟─3b3c4951-7c85-41b1-9f5b-1a23f4b4c465
 # ╟─f1675cb1-ece0-4a5f-a0eb-7fd16010461c
 # ╠═8320edcc-ef78-11ec-0445-b100a477c027
