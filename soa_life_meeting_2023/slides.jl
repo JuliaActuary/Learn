@@ -29,9 +29,6 @@ begin
     using DataFrames
 end
 
-# ╔═╡ 30427a18-e235-41e4-8524-3148a659ddb8
-using LinearAlgebra
-
 # ╔═╡ 1c0ccd93-59b8-46e2-bf3a-45ae79b35af0
 using MortalityTables, Yields, LifeContingencies, ActuaryUtilities
 
@@ -625,7 +622,7 @@ function popcnt(x, y) # for one-hot encoded categorical fields
     return LinearAlgebra.dot(x, y)
 end
 
-function sim(r, s) # for numerical fields
+function like(r, s) # for numerical fields
     return LinearAlgebra.dot(r, s)
 end
 ```
@@ -649,7 +646,7 @@ s = numpy.random.rand(n)
 def popcnt(x, y): # for one-hot encoded categorical fields
     return bitarray.count(x & y)
 
-def sim(r, s): # for numerical fields
+def like(r, s): # for numerical fields
     return numpy.dot(r, s)
 ```
 
@@ -2001,7 +1998,6 @@ BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 CondaPkg = "992eb4ea-22a4-4c89-a5bb-47a3300528ab"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 LifeContingencies = "c8f0d631-89cd-4a1f-93d0-7542c3692561"
-LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 MortalityTables = "4780e19d-04b9-53dc-86c2-9e9aa59b5a12"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 ProgressLogging = "33c8b6b6-d38a-422a-b730-caa89a2f386c"
@@ -2027,7 +2023,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.2"
 manifest_format = "2.0"
-project_hash = "a900ce7a1aeaa922304e0fc2524b283c61c72cb4"
+project_hash = "387436577b4fe50d7a924f0bbc2fe72c715063fa"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -3352,7 +3348,6 @@ version = "17.4.0+0"
 # ╟─db87f649-4680-4e5a-9ec0-1e2d998f8205
 # ╟─1465fdd0-f13b-4eee-a7d5-3fde591dea55
 # ╟─0810b84a-3129-4809-b71b-9155354985d0
-# ╠═30427a18-e235-41e4-8524-3148a659ddb8
 # ╟─43ac6ec6-7a55-4cba-a4db-f2f9758ac7ac
 # ╟─8b7ceb12-548c-49e0-af3a-6bb101a581e6
 # ╟─75338a1c-9684-4bf7-9952-cdeaf315e15b
