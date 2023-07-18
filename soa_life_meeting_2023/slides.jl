@@ -47,7 +47,7 @@ html"<button onclick='present()'>Press this to switch to presentation mode</butt
 md"# Introduction to Julia
 Download this notebook: [https://github.com/JuliaActuary/Learn/blob/master/soa_life_meeting_2023/slides.jl](https://github.com/JuliaActuary/Learn/blob/master/soa_life_meeting_2023/slides.jl)
 
-## Recorded for: SOA Life Meeting 2023
+## SOA Life Meeting 2023
 ### Presented by Yun-Tien Lee and Alec Loudenback
 
 *The views and opinions expressed in this presentation are those of the presenter and do not necessarily represent the official policy or position of Fortitude Re or any of its affiliates.*"
@@ -357,7 +357,7 @@ md"""
 
 ### Notebooks
 
-### Jupyter
+#### Jupyter
 
 - First class support Jupyter (**Julia**, **Pyt**hon, **R**)
 
@@ -401,7 +401,7 @@ Kind of like "magics" in Jupyter/Python, but even more powerful and language-wid
 
 # ╔═╡ 5c7f46f6-3a9d-430e-85ce-c692b6903845
 # add progress bar to a for loop
-@progress for i in 1:10
+@progress for i in 1:50
     sleep(0.1)
 end
 
@@ -3329,7 +3329,7 @@ version = "17.4.0+0"
 # ╠═e26e3daf-ee55-434d-9d46-c083537df72a
 # ╟─47556a7c-230a-4211-af06-f6fb61fbd7c1
 # ╠═ae5ed9ec-c4a3-4765-a3e2-35e9e2a285f1
-# ╠═8855b283-153e-4b9c-9758-97e0dea133a4
+# ╟─8855b283-153e-4b9c-9758-97e0dea133a4
 # ╠═dcaec0a0-ba12-4021-8169-9a4043e38758
 # ╠═7c668208-8fe7-4f9d-b23c-4725a244d176
 # ╟─6e4662da-72a5-42a5-80c5-a5846513a1ff
@@ -3404,7 +3404,7 @@ version = "17.4.0+0"
 # ╠═4cb7f1e1-8a07-4bd3-b92e-1a6c0ff3698f
 # ╠═d73421f8-e2e9-4b9a-90af-d7625a1d30c5
 # ╠═0bfc0522-10a1-4d08-a8fb-5c0dcbe1db77
-# ╟─3b3c4951-7c85-41b1-9f5b-1a23f4b4c465
+# ╠═3b3c4951-7c85-41b1-9f5b-1a23f4b4c465
 # ╟─f1675cb1-ece0-4a5f-a0eb-7fd16010461c
 # ╠═8320edcc-ef78-11ec-0445-b100a477c027
 # ╠═1e3e432b-3027-4dfe-992c-14189f675181
