@@ -59,7 +59,7 @@ Download this notebook: [https://github.com/JuliaActuary/Learn/blob/master/soa_l
 ## SOA Life Meeting 2023
 ### Presented by Yun-Tien Lee and Alec Loudenback
 
-*The views and opinions expressed in this presentation are those of the presenter and do not necessarily represent the official policy or position of Fortitude Re or any of its affiliates.*"
+*The views and opinions expressed in this presentation are those of the presenter and do not necessarily represent the official policy or position of their employers or any of their affiliates.*"
 
 # ╔═╡ 6c77e9ff-caec-4713-a71a-744df5bf7660
 md"## SOA Antitrust Compliance Guidelines
@@ -110,6 +110,14 @@ md"""
 ## Who uses Julia today?
 
 $(Resource("https://raw.githubusercontent.com/JuliaActuary/Learn/master/intro-video/assets/Julia-Users.png"))
+"""
+
+# ╔═╡ 44391fad-1915-4139-b11e-0937296c6de2
+md"""
+### Business outcomes from adopting Julia
+
+- **[Federal Reserve](https://frbny-dsge.github.io/DSGE.jl/latest/MatlabToJuliaTransition/)**: 1.3 to 10x speedup, with reduction of lines-of-code from 6,300 to 3,700 (migrated from Matlab)
+- **[Aviva](https://www.youtube.com/watch?v=8kFfArv675I)**: Solvency II modeling - 76x speedup (vs Algo, also "substantially faster than R") , facilitating 1000's of runs by users across 11 business units with 24/7 availability. 
 """
 
 # ╔═╡ fb686b8b-bbb8-43b5-8241-493463275346
@@ -1256,6 +1264,7 @@ html"""
 # ╟─142954b2-9615-4527-9a1a-d687583ff38e
 # ╟─47c7ecd8-1610-4ce8-bff1-814a48336368
 # ╟─7b86f12b-de88-40e0-bee3-1d9ba188fd40
+# ╟─44391fad-1915-4139-b11e-0937296c6de2
 # ╟─fb686b8b-bbb8-43b5-8241-493463275346
 # ╠═3fcc0272-814a-423b-aad0-63030a32b8f5
 # ╠═3d8916c4-2315-4420-a19b-61ac58ea9d60
