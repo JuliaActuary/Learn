@@ -54,7 +54,11 @@ html"<button onclick='present()'>Press this to switch to presentation mode</butt
 
 # ╔═╡ 3c2da572-90d0-4206-9586-18f2cea6b6ca
 md"# Introduction to Julia
-Download this notebook: [https://github.com/JuliaActuary/Learn/blob/master/soa_life_meeting_2023/slides.jl](https://github.com/JuliaActuary/Learn/blob/master/soa_life_meeting_2023/slides.jl)
+- Download this notebook: 
+  - [https://github.com/JuliaActuary/Learn/blob/master/soa_life_meeting_2023/slides.jl](https://github.com/JuliaActuary/Learn/blob/master/soa_life_meeting_2023/slides.jl)
+
+- View Static HTML:
+  - [https://juliaactuary.github.io/Learn/soa_life_meeting_2023/slides.html](https://juliaactuary.github.io/Learn/soa_life_meeting_2023/slides.html)
 
 ## SOA Life Meeting 2023
 ### Presented by Yun-Tien Lee and Alec Loudenback
@@ -118,6 +122,8 @@ md"""
 
 - **[Federal Reserve](https://frbny-dsge.github.io/DSGE.jl/latest/MatlabToJuliaTransition/)**: 1.3 to 10x speedup, with reduction of lines-of-code from 6,300 to 3,700 (migrated from Matlab)
 - **[Aviva](https://www.youtube.com/watch?v=8kFfArv675I)**: Solvency II modeling - 76x speedup (vs Algo, also "substantially faster than R") , facilitating 1000's of runs by users across 11 business units with 24/7 availability. 
+
+... but focusing on just the performance *understates* the case for using Julia.
 """
 
 # ╔═╡ fb686b8b-bbb8-43b5-8241-493463275346
@@ -136,12 +142,6 @@ f(x) = x^2
 
 # ╔═╡ 0c66ed9c-4fd2-4636-ad56-5bcc0b606f07
 f(2)
-
-# ╔═╡ bba42bba-d76e-48f1-a376-0c03a817f880
-x = "string are written like this"
-
-# ╔═╡ 494265ee-e0c5-4644-9cd8-63e0f40de78b
-x[1:5]
 
 # ╔═╡ bb75f7b0-5cb2-425d-8c3c-13f49862d44a
 let
@@ -1269,8 +1269,6 @@ html"""
 # ╠═3fcc0272-814a-423b-aad0-63030a32b8f5
 # ╠═3d8916c4-2315-4420-a19b-61ac58ea9d60
 # ╠═0c66ed9c-4fd2-4636-ad56-5bcc0b606f07
-# ╠═bba42bba-d76e-48f1-a376-0c03a817f880
-# ╠═494265ee-e0c5-4644-9cd8-63e0f40de78b
 # ╠═bb75f7b0-5cb2-425d-8c3c-13f49862d44a
 # ╟─b72b91c5-c6df-4eb5-a5e0-63ef8f20d34c
 # ╠═f23b4b4e-baf5-4a7d-9a33-14050f1993e6
