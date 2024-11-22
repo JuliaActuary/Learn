@@ -1,0 +1,15 @@
+project:
+  title: "julia-intro"
+
+format:
+  html:
+    theme:
+      light:
+       - minty
+       - style/fonts.scss
+    code-link: true
+    code-copy: hover
+    mainfont: Petrona
+    monofont: JetBrains
+    highlight-style: ayu
+

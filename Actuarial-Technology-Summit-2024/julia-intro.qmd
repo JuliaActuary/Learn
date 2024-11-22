@@ -1,0 +1,484 @@
+---
+title: More Productive Actuarial Modeling 
+subtitle: With Julia and JuliaActuary
+author:
+  - name: Alec Loudenback, FSA, MAAA
+engine: julia
+format: 
+  revealjs:
+    theme: default
+    footer: |
+      A glimpse into The Julia Language
+    standalone: true
+    preview-links: auto
+    center: true
+    slide-number: true
+    fig-align: center
+    code-line-numbers: false
+    overview: true
+    code-link: true
+    smaller: false
+    highlight-style: github
+    code-annotations: select
+    cache: refresh
+---
+
+```{julia}
+#| echo: false
+#| output: false
+using Pkg
+Pkg.activate(".")
+Pkg.instantiate()
+Pkg.status()
+```
+
+## Today's Talk
+
+-   About Me
+-   What is Julia?
+-   Actuarial Packages in Julia
+-   Thoughts as Open Source Actuarial Developer
+
+## About Me {.smaller}
+
+::::: columns
+::: {.column width="50%"}
+**Work Experience**
+
+-   Manulife
+-   Resolution Life
+-   Kuvare
+-   Fortitude Re
+-   Wide range of actuarial functions
+:::
+
+::: {.column width="50%"}
+**Technical Background**
+
+-   Actuarial Modeling since 2010
+    -   AXIS, ALFA, BondEdge, SLOPE, Excel
+-   Programming since 2010
+    -   Major: VBA, C, R, Python, Julia
+    -   Other: Go, Scheme, Haskell, Java, Dart, Javascript, Mathematica, MATLAB
+:::
+:::::
+
+::: notes
+Currently writing: "Computational Thinking for Actuaries and Financial Professionals"
+:::
+
+## Upcoming Book
+
+Open-Access book to be published in 2025 (public beta soon!)
+
+![](assets/book.png)
+
+## Julia: Fast. Productive. Fun. {.center}
+
+# 1. Julia is Fast {background-color="#B8E6B8"}
+
+## The Life Modeling Problem
+
+![](assets/fig-life-modeling-benchmark-output-2.svg)
+
+## IRR calculation of 60 years of monthly cashflows {.smaller}
+
+| Language | Package          | Function   | Mean (ns)   | Relative Mean |
+|----------|------------------|------------|-------------|---------------|
+| Python   | numpy_financial  | irr        | 519,306,422 | 123,146x      |
+| Python   | better           | irr_newton | 382,166     | 91x           |
+| Julia    | ActuaryUtilities | irr        | 4,217       | 1x            |
+
+## Black Scholes Option Price {.smaller}
+
+$$
+C(S_t, t) = N(d_1)S_t - N(d_2)Ke^{-r(T-t)}
+$$
+
+$$
+d_1 = \frac{1}{\sigma\sqrt{T-t}}\left[\ln\left(\frac{S_t}{K}\right) + \left(r + \frac{\sigma^2}{2}\right)(T-t)\right]
+$$
+
+$$
+d_2 = d_1 - \sigma\sqrt{T-t}
+$$
+
+| Language | Mean (ns) | Relative Mean |
+|----------|-----------|---------------|
+| Python   | 817,000   | 19,926x       |
+| R        | 3,855     | 93x           |
+| Julia    | 42        | 1x            |
+
+## The Two Language Problem {.smaller}
+
+::: incremental
+-   One language for "productivity", another for performance
+
+-   Some languages do not have the semantics or specification that allows them to be "fast". So work gets outsourced to language that can be "fast".
+
+-   Examples: Python & C++
+
+-   Lots of attempts to make Python fast.
+
+-   Mojo [recently gave up](https://github.com/modularml/mojo/commit/cb307d0f57bb07b37528e8f6e2c859a1e07db941#diff-7e667626a389696a4c9d52e2b686bbef5108be183bfb929d8ec0b5d4f64d72b6) trying to be a superset of Python: ![](assets/mojo.png)
+:::
+
+# 2. Julia is Productive {background-color="#B8C5E6"}
+
+## Real-World Applications {.smaller}
+
++---------------+----------------------------+--------------------------------------------------+------------------------------------+
+|               | NY Federal Reserve         | Aviva                                            | Conning                            |
++===============+============================+==================================================+====================================+
+| What          | Macro economic forecasting | Solvency II                                      | Stochastic Risk Scenarios          |
++---------------+----------------------------+--------------------------------------------------+------------------------------------+
+| Speedup       | 9x\                        | 76x\                                             | 5-10x\                             |
+|               | *vs MATLAB*                | *on single computer versus Algo compute cluster* | *vs undisclosed prior*             |
++---------------+----------------------------+--------------------------------------------------+------------------------------------+
+| Lines of Code | 50%                        | "Much smaller"                                   | "Simpler code...high productivity" |
++---------------+----------------------------+--------------------------------------------------+------------------------------------+
+
+## Why is Julia Productive? {.smaller}
+
+## Julia gets the Basics Right
+
+High level language. Sensible defaults. Robust standard library.
+
+::: {style="font-size: 0.65em;"}
++-------------------------------------+-----------------------------------+--------------------------------------------+
+| Julia                               | R                                 | Python                                     |
++=====================================+===================================+============================================+
+| ``` julia                           | ``` r                             | ``` python                                 |
+| using Distributions                 |                                   | import scipy.stats as sps                  |
+|                                     | runif(100)                        | import numpy as np                         |
+| rand(100)                           | rnorm(100)                        |                                            |
+| rand(Normal(), 100)                 | rbern(100, 0.5)                   |                                            |
+| rand(Bernoulli(0.5), 100)           | sample(c("Preferred","Standard"), | sps.uniform.rvs(size=100)                  |
+| rand(["Preferred","Standard"], 100) | 100, replace=TRUE)                | sps.norm.rvs(size=100)                     |
+| ```                                 | ```                               | sps.bernoulli.rvs(p=0.5,size=100)          |
+|                                     |                                   | np.random.choice(["Preferred","Standard"], |
+|                                     |                                   | size=100)                                  |
+|                                     |                                   | ```                                        |
++-------------------------------------+-----------------------------------+--------------------------------------------+
+:::
+
+## Julia is Expressive and Adaptable {.smaller}
+
+**The Expression Problem**: Tradition OO paradigms do not allow for extension of both representation (data types) and behavior (methods).
+
+::::: {.columns style="font-size: 0.65em;"}
+::: {.column width="50%"}
+**Julia (Multiple Dispatch)**
+
+``` julia
+abstract type InsuranceProduct end
+
+struct TermLife <: InsuranceProduct
+    term::Int
+    face_amount::Float64
+    age::Int
+end
+
+struct WholeLife <: InsuranceProduct
+    face_amount::Float64
+    age::Int
+end
+
+# Calculate premium
+premium(p::TermLife) = ...
+premium(p::WholeLife) = ...
+
+# Calculate reserves
+reserve(p::TermLife, t::Int) = ...
+reserve(p::WholeLife, t::Int) = ...
+```
+
+\
+:::
+
+::: {.column width="50%"}
+**Python (Object-Oriented)**
+
+``` python
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+
+class InsuranceProduct(ABC):
+    @abstractmethod
+    def calculate_premium(self) -> float:
+        pass
+    
+    @abstractmethod
+    def calculate_reserve(self, t: int) -> float:
+        pass
+
+@dataclass
+class TermLife(InsuranceProduct):
+    term: int
+    face_amount: float
+    age: int
+    
+    def calculate_premium(self) -> float:
+        # Term-specific premium calculation
+        return ...
+    
+    def calculate_reserve(self, t: int) -> float:
+        # Term-specific reserve calculation
+        return ...
+
+# ... repeat for Whole Life
+```
+:::
+:::::
+
+## Multiple Dispatch is Unreasonably Effective {.smaller}
+
+What about adding a new kind of product? And new functionality?
+
+::::: {.columns style="font-size: 0.65em;"}
+::: {.column width="50%"}
+**Julia (Multiple Dispatch)**
+
+``` julia
+struct DeferredAnnuity <: InsuranceProduct
+    premium::Float64
+    deferral_period::Int
+    age::Int
+end
+
+# Implement existing methods
+premium(p::DeferredAnnuity) = ...
+reserve(p::DeferredAnnuity, t::Int) = ...
+
+# Adding new function
+cash_value(p::TermLife, t::Int) = ...
+cash_value(p::WholeLife, t::Int) = ...
+cash_value(p::DeferredAnnuity, t::Int) = ...
+```
+
+Multiple Dispatch allows for extension of both data types *and* functionality.\
+:::
+
+::: {.column width="50%"}
+**Python (Object-Oriented)**
+
+``` python
+@dataclass
+class DeferredAnnuity(InsuranceProduct):
+    premium: float
+    deferral_period: int
+    age: int
+    
+    def calculate_premium(self) -> float:
+        # Annuity-specific premium calc
+        return ...
+    
+    def calculate_reserve(self, t: int) -> float:
+        # Annuity-specific reserve calc
+        return ...
+
+# ... cash_value?
+```
+
+Can extend a new representation, but adding new functionality (e.g. `cash_value`) requires modifying other classes which you may not own.
+
+Workarounds require complex "patterns" (e.g. visitor pattern) or violating good code practices.
+:::
+:::::
+
+## Julia is Multi-Paradigm
+
+-   Imperative/Procedural
+-   Functional (including awesome things like Transducers)
+-   Array Programming (including GPU, TPUs, etc.)
+-   Metaprogramming / Macros\
+-   Object Oriented
+-   Trait-based
+
+## Incredibly Capable. Highly Extensible. {.smaller}
+
+Take the derivative of a policy account value projection:
+
+``` julia
+julia> using Zygote
+
+julia> function policy_av(pol)
+    COIs = [0.00319, 0.00345, 0.0038, 0.00419, 0.0047, 0.00532]
+    av = 0.0
+    for coi in COIs
+        av += av * pol.credit_rate
+        av += pol.annual_premium
+        av -= pol.face * coi
+    end
+    return av                # return the final account value
+end
+
+julia> pol = (annual_premium = 1000, face = 100_000, credit_rate = 0.05);
+
+julia> policy_av(pol)        # the ending account value
+4048.08
+
+julia> policy_av'(pol)       # the derivative of the account value with respect to the inputs
+(annual_premium = 6.802, face = -0.0275, credit_rate = 10972.52)
+```
+
+## Using R and Python inside Julia
+
+::::: {.columns style="font-size: 0.55em;"}
+::: {.column width="50%"}
+**PythonCall.jl**
+
+![](assets/seaborn.png)
+:::
+
+::: {.column width="50%"}
+**RCall.jl**
+
+``` julia-repl
+julia> x = randn(10)
+10-element Vector{Float64}:
+ -1.1051005478030076
+  0.9268172588156641
+  0.15091347296011737
+  1.2137240327990235
+ -0.17021345031444762
+ -0.25866016794554947
+ -0.14810634014555002
+  2.3610534120105218
+ -2.0147868246523273
+ -0.39966552507678343
+
+julia> R"t.test($x)"
+RObject{VecSxp}
+
+    One Sample t-test
+
+data:  `#JL`$x
+t = 0.14378, df = 9, p-value = 0.8888
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -0.8191264  0.9303215
+sample estimates:
+ mean of x
+0.05559753
+```
+:::
+:::::
+
+::: notes
+Currently writing: "Computational Thinking for Actuaries and Financial Professionals"
+:::
+
+# 3. Julia is Fun {background-color="#E6B8B8"}
+
+## Developer Experience {.smaller}
+
+::: incremental
+-   Modern, full-featured environment
+-   Integrated package manager
+-   "Just works" dependency management
+-   Built-in documentation and testing
+-   First-class debugging tools
+-   Single install process
+-   Smooth learning curve
+-   Great VS Code integration
+:::
+
+## Cool Toys {.smaller}
+
+::: incremental
+-   Jupyter (Julia, Python, R)
+-   Pluto is modern re-imagining of notebook
+-   Language-wide automatic differentiation
+-   First-class data ecosystem and visualizations
+-   Accessible GPU programming
+-   Full unicode support
+-   Massive scientific computing ecosystem
+-   Probabilistic programming
+:::
+
+# Actuarial Packages {background-color="#E6E6B8"}
+
+## Mortality Tables {.smaller}
+
+```{julia}
+#| echo: true
+using MortalityTables
+
+MortalityTables.table("2015 VBT Smoker Distinct Male Non-Smoker ALB")
+```
+
+## Life Contingencies {.smaller}
+
+```{julia}
+#| echo: true
+using LifeContingencies
+using MortalityTables
+using FinanceModels
+
+# load mortality rates
+vbt2015 = MortalityTables.table("2015 VBT Smoker Distinct Male Non-Smoker ALB")
+issue_age = 30
+life = SingleLife(
+    mortality=vbt2015.select[issue_age],
+)
+yield = Yield.Constant(0.05)
+lc = LifeContingency(life, yield)
+
+# Summary Scalars
+@show premium_net(lc)       # Net whole life premium
+@show reserve_premium_net(lc, 5);              # Net premium reserve at time 5
+```
+
+## Financial Mathematics {.smaller}
+
+```{julia}
+#| echo: true
+using ActuaryUtilities
+
+cashflows = [5, 5, 105]
+discount_rate = 0.03
+
+@show present_value(discount_rate, cashflows)
+@show duration(Macaulay(), discount_rate, cashflows)
+@show duration(discount_rate, cashflows)
+@show convexity(discount_rate, cashflows);
+```
+
+## Economic Scenario Generators {.smaller}
+
+```{julia}
+#| echo: true
+using EconomicScenarioGenerators, Copulas
+
+m = BlackScholesMerton(0.01, 0.02, 0.15, 100.0)
+s = ScenarioGenerator(
+    1,    # timestep
+    30,   # projection horizon
+    m,    # model
+)
+ss = [s, s]
+g = ClaytonCopula(2, 7)    # highly dependent model
+c = Correlated(ss, g)
+x = collect(c)            # an array of tuples
+```
+
+## Additional Resources {.smaller}
+
+-   JuliaActuary.org
+-   15 demonstration examples
+-   Utilities for experience studies (ExperienceAnalysis.jl)
+-   Many features not showcased from libraries
+
+## Open Source Development {.smaller}
+
+::: incremental
+-   Strong support from Julia community
+-   Growing number of actuaries who code
+-   Increasing acceptance of open source in companies
+-   Active development of new tools and packages
+:::
+
+::: notes
+Future directions and opportunities for contribution
+:::

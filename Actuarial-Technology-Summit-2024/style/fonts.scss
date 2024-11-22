@@ -1,0 +1,75 @@
+/*-- scss:variables --*/
+
+// FONTS & FORMATTING
+
+/*-- font families --*/
+$headings-font-family: 'Atkinson Hyperlegible';
+//$font-family-monospace: 'Courier Prime';
+$font-family-base: 'Atkinson Hyperlegible';
+$font-family-monospace: 'Fira Code';
+
+/*-- scss:rules --*/
+
+/* atkinson-hyperlegible-regular - latin */
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+       url('style/fonts/atkinson-hyperlegible-v1-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('style/fonts/atkinson-hyperlegible-v1-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* atkinson-hyperlegible-italic - latin */
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: italic;
+  font-weight: 400;
+  src: local(''),
+       url('style/fonts/atkinson-hyperlegible-v1-latin-italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('style/fonts/atkinson-hyperlegible-v1-latin-italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* atkinson-hyperlegible-700 - latin */
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-weight: 700;
+  src: local(''),
+       url('style/fonts/atkinson-hyperlegible-v1-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('style/fonts/atkinson-hyperlegible-v1-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* atkinson-hyperlegible-700italic - latin */
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: italic;
+  font-weight: 700;
+  src: local(''),
+       url('style/fonts/atkinson-hyperlegible-v1-latin-700italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('style/fonts/atkinson-hyperlegible-v1-latin-700italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+@font-face {
+  font-family: 'JetBrains';
+  font-style: normal;
+  font-weight: 700;
+  src: local(""),
+       url("style/fonts/JetBrainsMono-Regular.woff2") format("woff2") /* Chrome 26+, Opera 23+, Firefox 39+ */
+      //  url("style/fonts/FiraCode-Regular.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,400;0,500;1,400&display=swap');
+
+
+h1, h2, h3 {
+    font-family: "Petrona", serif;
+  }
+  
+  h4, h5, h6 {
+    font-family: 'Red Hat Text', sans-serif;
+    font-weight: 300;
+  }

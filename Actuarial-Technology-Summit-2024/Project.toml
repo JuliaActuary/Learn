@@ -1,0 +1,7 @@
+[deps]
+ActuaryUtilities = "bdd23359-8b1c-4f88-b89b-d11982a786f4"
+Copulas = "ae264745-0b69-425e-9d9d-cf662c5eec93"
+EconomicScenarioGenerators = "1d18cbdc-9ca7-45fd-a8b2-b9434f9145be"
+FinanceModels = "77f2ae65-bdde-421f-ae9d-22f1af19dd76"
+LifeContingencies = "c8f0d631-89cd-4a1f-93d0-7542c3692561"
+MortalityTables = "4780e19d-04b9-53dc-86c2-9e9aa59b5a12"
