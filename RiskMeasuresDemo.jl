@@ -27,7 +27,7 @@ end
 # ╔═╡ 89923870-8ec4-4740-bbb1-cafa0b3742a9
 md"## A demonstration of Risk Measures
 
-This notebook projects an insurance liabilty for 10 years across a number of scenarios. The resulting best estimate liability, distribution of outcomes, and a variety of [risk measures](https://juliaactuary.github.io/ActuaryUtilities.jl/stable/risk_measures/) are highlighted.
+This notebook projects an insurance liabilty for 10 years across a number of scenarios. The resulting best estimate liability, distribution of outcomes, and a variety of [risk measures](https://docs.juliaactuary.org/ActuaryUtilities/stable/risk_measures/) are highlighted.
 
 Modify the product's guaranteed rate, the assumed mean interest rate, and the interest rate volatility and observe the impact on the results.
 "

@@ -170,7 +170,7 @@ sum(data.deaths) / sum(data.exposures)
 # ╔═╡ 49bf0bd3-ad5a-409e-a25e-54f7aea44eb3
 md"## 2. Parametric model
 
-In this example, we utilize a [MakehamBeard](https://juliaactuary.github.io/MortalityTables.jl/stable/ParametricMortalityModels/#MortalityTables.MakehamBeard) parameterization because it's already very similar in form to a [logistic function](https://en.wikipedia.org/wiki/Logistic_function). This is important because our desired output is a probability (ie the probablity of a death at a given age), so the value must be constrained to be in the interval between zero and one.
+In this example, we utilize a [MakehamBeard](https://docs.juliaactuary.org/MortalityTables/stable/ParametricMortalityModels/#MortalityTables.MakehamBeard-ParametricMortalityModels) parameterization because it's already very similar in form to a [logistic function](https://en.wikipedia.org/wiki/Logistic_function). This is important because our desired output is a probability (ie the probablity of a death at a given age), so the value must be constrained to be in the interval between zero and one.
 
 The **prior** values for `a`,`b`,`c`, and `k` are chosen to constrain the hazard (mortality) rate to be between zero and one. 
 
